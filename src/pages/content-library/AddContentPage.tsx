@@ -164,14 +164,26 @@ const AddContentPage = () => {
             isDragActive ? 'border-primary bg-background' : 'border-primary/40 bg-background',
           )}
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+          <span className="flex items-center justify-center">
             <img src={uploadIcon} alt="" className="h-5 w-5" aria-hidden="true" />
           </span>
+          <div className='mt-2 flex flex-col gap-2'>
           <p className="text-sm text-slate-900">
-            <span className="font-semibold">Drag files here</span> or browse your system
+            <span className="font-bold text-sm text-[#0F172A]">Drag files here or browse your system</span> 
           </p>
-          <p className="text-xs text-muted">{FORMATS_LABEL}</p>
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted">PDF · DOC · DOCX · ZIP</p>
+          <p className="text-xs text-[#94A3B8] font-normal">{FORMATS_LABEL}</p>
+          <div className="mt-1 flex items-center justify-center gap-2">
+            {['DOCX', 'PDF', 'ZIP'].map((format) => (
+              <span
+                key={format}
+                className="rounded-[6px] border border-[#35383914] bg-white px-2 py-1 text-xs font-medium text-[#0F172A]"
+              >
+                {format}
+              </span>
+            ))}
+          </div>
+          </div>
+
           <input
             ref={inputRef}
             type="file"
@@ -195,9 +207,9 @@ const AddContentPage = () => {
                       key={block.key}
                       className="overflow-hidden rounded-lg border border-[#35383914] bg-background"
                     >
-                      <div className="flex items-center gap-md px-md py-3">
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md">
-                          <img src={fileTextIcon} alt="" className="h-5 w-5" aria-hidden="true" />
+                      <div className="flex items-center gap-md px-5 py-3">
+                        <span className="flex shrink-0 items-center justify-center rounded-md">
+                          <img src={fileTextIcon} alt="" className="h-6 w-6" aria-hidden="true" />
                         </span>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium text-slate-900">{item.name}</p>

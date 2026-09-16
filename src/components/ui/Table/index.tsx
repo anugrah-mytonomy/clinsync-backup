@@ -29,6 +29,7 @@ interface TableProps<T> {
   selectedIds?: Set<string>;
   onToggleRow?: (id: string) => void;
   onToggleAll?: (checked: boolean) => void;
+  onRowClick?: (row: T) => void;
   pagination?: TablePaginationProps;
   emptyMessage?: ReactNode;
   className?: string;
@@ -113,6 +114,7 @@ function Table<T>({
   selectedIds,
   onToggleRow,
   onToggleAll,
+  onRowClick,
   pagination,
   emptyMessage = 'No results found.',
   className,
@@ -173,10 +175,14 @@ function Table<T>({
                 return (
                   <tr
                     key={rowKey}
-                    className="border-x-0 border-y border-solid border-[#35383914] first:border-t-0 hover:bg-surface/60"
+                    onClick={() => onRowClick?.(row)}
+                    className={cn(
+                      'border-x-0 border-y border-solid border-[#35383914] first:border-t-0 hover:bg-surface/60',
+                      onRowClick && 'cursor-pointer',
+                    )}
                   >
                     {selectable && (
-                      <td className="px-3 py-3 align-middle">
+                      <td className="px-3 py-3 align-middle" onClick={(event) => event.stopPropagation()}>
                         <input
                           type="checkbox"
                           checked={isSelected}

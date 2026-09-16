@@ -5,7 +5,7 @@ import Sidebar from '@/components/layout/Sidebar';
 
 describe('Sidebar', () => {
   it('marks the current route as active and others as inactive', () => {
-    renderWithProviders(<Sidebar />, { route: '/dashboard/scans' });
+    renderWithProviders(<Sidebar />, { route: '/scans' });
 
     expect(screen.getByRole('link', { name: /scan history/i })).toHaveAttribute(
       'aria-current',

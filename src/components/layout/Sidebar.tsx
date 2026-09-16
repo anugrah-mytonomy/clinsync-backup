@@ -10,7 +10,7 @@ import scanHistoryIcon from '@/assets/Scan_History.svg';
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', iconSrc: dashboardIcon, end: true },
   { to: '/library', label: 'Library', iconSrc: contentLibraryIcon },
-  { to: '/dashboard/scans', label: 'Scan History', iconSrc: scanHistoryIcon },
+  { to: '/scans', label: 'Scan History', iconSrc: scanHistoryIcon },
 ];
 
 const bottomNavItems = [
@@ -53,7 +53,7 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      <div className="flex flex-col gap-xs md:px-md">
+      <div className="flex flex-col gap-xs md:px-md mb-3">
         {bottomNavItems.map(({ to, label, icon: Icon }) => (
           <NavLink key={to} to={to} className={navLinkClasses} title={label}>
             <Icon className="h-[14px] w-[14px] shrink-0" />
@@ -61,7 +61,7 @@ const Sidebar = () => {
           </NavLink>
         ))}
 
-        <div className="mt-md flex items-center justify-center gap-sm border-t border-border px-sm pt-md md:justify-start md:px-md">
+        <div className="mt-2 flex items-center justify-center gap-sm  px-sm md:justify-start">
           <img
             src={userAvatar}
             alt=""

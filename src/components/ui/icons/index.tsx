@@ -122,6 +122,27 @@ const ChevronDownIcon = (props: IconProps) => {
   );
 };
 
+const InfoIcon = (props: IconProps) => {
+  return (
+    <OutlineIcon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5" />
+      <circle cx="12" cy="7.5" r="0.4" fill="currentColor" stroke="none" />
+    </OutlineIcon>
+  );
+};
+
+const ReplaceIcon = (props: IconProps) => {
+  return (
+    <OutlineIcon {...props}>
+      <path d="M16 3l4 4-4 4" />
+      <path d="M20 7H9a5 5 0 0 0-5 5" />
+      <path d="M8 21l-4-4 4-4" />
+      <path d="M4 17h11a5 5 0 0 0 5-5" />
+    </OutlineIcon>
+  );
+};
+
 const MoreVerticalIcon = (props: IconProps) => {
   return (
     <svg
@@ -144,8 +165,10 @@ export {
   ChevronDownIcon,
   DocumentIcon,
   HelpIcon,
+  InfoIcon,
   MoreVerticalIcon,
   PlusIcon,
+  ReplaceIcon,
   SearchIcon,
   SettingsIcon,
   TrashIcon,

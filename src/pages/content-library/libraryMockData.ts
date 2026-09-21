@@ -1,4 +1,4 @@
-import type { LibraryDocument } from '@/types/library';
+import type { LibraryDocument } from '@/pages/content-library/types';
 
 export const libraryDocuments: LibraryDocument[] = [
   {

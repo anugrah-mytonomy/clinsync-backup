@@ -1,14 +1,6 @@
 import { Link } from 'react-router-dom';
 import { cn } from '@/utils/cn';
-
-export interface BreadcrumbItem {
-  label: string;
-  to?: string;
-}
-
-interface BreadcrumbProps {
-  items: BreadcrumbItem[];
-}
+import type { BreadcrumbProps } from '@/pages/scan-history/types';
 
 const Breadcrumb = ({ items }: BreadcrumbProps) => {
   return (

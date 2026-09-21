@@ -21,6 +21,11 @@ export default defineConfig(({ mode }) => {
           secure: true,
           rewrite: (path) => path.replace(/^\/api_auth/, ''),
         },
+        '/s3': {
+          target: env.VITE_S3_ENDPOINT || 'http://localhost:4566',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/s3/, ''),
+        },
       },
     },
     test: {

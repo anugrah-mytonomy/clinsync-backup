@@ -49,15 +49,6 @@ const AlertIcon = (props: IconProps) => {
   );
 };
 
-const CheckCircleIcon = (props: IconProps) => {
-  return (
-    <OutlineIcon {...props}>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M8.5 12.5l2.5 2.5 5-5" />
-    </OutlineIcon>
-  );
-};
-
 const UploadIcon = (props: IconProps) => {
   return (
     <OutlineIcon {...props}>
@@ -81,15 +72,6 @@ const DocumentIcon = (props: IconProps) => {
       <path d="M7 3.5h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1Z" />
       <path d="M14 3.5V8h4" />
       <path d="M8.5 12.5h7M8.5 16h4.5" />
-    </OutlineIcon>
-  );
-};
-
-const VideoIcon = (props: IconProps) => {
-  return (
-    <OutlineIcon {...props}>
-      <rect x="3" y="6" width="13" height="12" rx="1.5" />
-      <path d="M16 10.5 21 7v10l-5-3.5Z" />
     </OutlineIcon>
   );
 };
@@ -161,7 +143,6 @@ const MoreVerticalIcon = (props: IconProps) => {
 
 export {
   AlertIcon,
-  CheckCircleIcon,
   ChevronDownIcon,
   DocumentIcon,
   HelpIcon,
@@ -173,5 +154,4 @@ export {
   SettingsIcon,
   TrashIcon,
   UploadIcon,
-  VideoIcon,
 };

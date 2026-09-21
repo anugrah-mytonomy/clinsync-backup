@@ -12,8 +12,8 @@ import {
   getDocumentById,
   getFindingsForDocumentInScan,
   getScanHistoryForDocument,
-  type DocumentScanHistoryEntry,
 } from '@/pages/scan-history/scanHistoryMockData';
+import type { DocumentScanHistoryEntry } from '@/pages/scan-history/types';
 
 const DocumentDetailsPage = () => {
   const { scanId, documentId } = useParams<{ scanId: string; documentId: string }>();

@@ -10,6 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   fullWidth?: boolean;
   isLoading?: boolean;
+  rounded?: boolean;
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -30,6 +31,7 @@ const Button = ({
   size = 'md',
   fullWidth = false,
   isLoading = false,
+  rounded = true,
   disabled,
   className,
   children,
@@ -38,7 +40,8 @@ const Button = ({
   return (
     <button
       className={cn(
-        'inline-flex items-center justify-center gap-sm rounded font-sans font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60',
+        'inline-flex items-center justify-center gap-sm font-sans font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60',
+        rounded && 'rounded',
         variantClasses[variant],
         sizeClasses[size],
         fullWidth && 'w-full',

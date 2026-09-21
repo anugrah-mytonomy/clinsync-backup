@@ -27,15 +27,15 @@ const navLinkClasses = ({ isActive }: { isActive: boolean }) =>
 const Sidebar = () => {
   return (
     <aside className="sticky top-0 flex h-screen w-16 shrink-0 flex-col border-r border-border bg-background md:w-[200px]">
-      <div className="flex h-[64px] shrink-0 items-center gap-sm px-xs md:px-md">
+      <div className="flex h-[64px] shrink-0 items-center gap-2.5 px-xs md:px-md">
         <img src={logoIcon} alt="" className="h-8 w-8 shrink-0" aria-hidden="true" />
         <div className="hidden leading-tight md:block">
-          <p className="text-base font-semibold text-slate-900">ClinSync</p>
-          <p className="text-xs text-muted">Mytonomy</p>
+          <p className="text-xl font-semibold text-slate-900">ClinSync</p>
+          <p className="text-xs text-[#6B7387]">Mytonomy</p>
         </div>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-xs md:px-md">
+      <nav className="flex flex-1 flex-col gap-xs md:px-md mt-6">
         {navItems.map(({ to, label, iconSrc, end }) => (
           <NavLink key={to} to={to} end={end} className={navLinkClasses} title={label}>
             {({ isActive }) => (

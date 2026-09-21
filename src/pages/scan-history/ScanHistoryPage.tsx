@@ -4,7 +4,7 @@ import Table, { type TableColumn } from '@/components/ui/Table';
 import { InfoIcon } from '@/components/ui/icons';
 import { scanRuns } from '@/pages/scan-history/scanHistoryMockData';
 import { StatusBadge } from '@/pages/scan-history/badges';
-import type { ScanRun } from '@/types/scanHistory';
+import type { ScanRun } from '@/pages/scan-history/types';
 import generatingIcon from '@/assets/Generating.svg';
 import downloadIcon from '@/assets/Download.svg';
 import regenerateIcon from '@/assets/Regenerate.svg';

@@ -4,10 +4,11 @@ import PageHeader from '@/components/layout/PageHeader';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
 import Table, { type TableColumn } from '@/components/ui/Table';
-import { MoreVerticalIcon, PlusIcon, SearchIcon, UploadIcon } from '@/components/ui/icons';
+import { MoreVerticalIcon, PlusIcon, SearchIcon } from '@/components/ui/icons';
 import { cn } from '@/utils/cn';
 import { libraryDocuments as initialDocuments } from '@/pages/content-library/libraryMockData';
-import type { LibraryDocument, LibraryRiskLevel } from '@/types/library';
+import NoContent from '@/pages/content-library/NoContent';
+import type { LibraryDocument, LibraryRiskLevel } from '@/pages/content-library/types';
 import scanMaximizeIcon from '@/assets/Scan_Maximize.svg';
 import playIcon from '@/assets/Play.svg';
 import filterLinesIcon from '@/assets/Filter_lines.svg';
@@ -190,20 +191,34 @@ const LibraryPage = () => {
             <MoreVerticalIcon className="h-4 w-4" />
           </button>
           {openMenuId === doc.id && (
-            <div className="absolute right-0 z-10 mt-1 w-36 rounded-md border border-border bg-background py-1 shadow-md">
+            <div className="absolute right-0 z-10 mt-1 w-40 overflow-hidden rounded-lg border border-[#35383914] bg-background py-1 shadow-[0px_4px_6px_-1px_rgba(16,24,40,0.1),0px_2px_4px_-2px_rgba(16,24,40,0.1)]">
               <button
                 type="button"
                 onClick={() => setOpenMenuId(null)}
-                className="block w-full px-3 py-1.5 text-left text-sm text-slate-600 hover:bg-surface"
+                className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#353839] hover:bg-surface"
               >
-                View details
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpenMenuId(null)}
+                className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#353839] hover:bg-surface"
+              >
+                Replace
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpenMenuId(null)}
+                className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#353839] hover:bg-surface"
+              >
+                Download
               </button>
               <button
                 type="button"
                 onClick={() => handleRemove(doc.id)}
-                className="block w-full px-3 py-1.5 text-left text-sm text-danger hover:bg-surface"
+                className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#B42318] hover:bg-surface"
               >
-                Remove
+                Delete
               </button>
             </div>
           )}
@@ -213,34 +228,7 @@ const LibraryPage = () => {
   ];
 
   if (documents.length === 0) {
-    return (
-      <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[#F1F5F9]">
-        <PageHeader
-          title="Content Library"
-          subtitle="Add content to the ClinSync content library for health checking."
-          actions={
-            <Button onClick={goToAddContent}>
-              <PlusIcon className="h-4 w-4" />
-              Add Content
-            </Button>
-          }
-        />
-
-        <div className="flex flex-1 flex-col p-lg">
-          <div className="flex flex-1 items-center justify-center rounded-lg border border-border bg-background">
-            <div className="flex flex-col items-center gap-sm text-center">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-surface text-muted">
-                <UploadIcon className="h-5 w-5" />
-              </span>
-              <p className="text-sm font-semibold text-slate-900">No content added yet</p>
-              <p className="max-w-xs text-xs text-muted">
-                Upload your first documents to get started with content governance.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <NoContent onAddContent={goToAddContent} />;
   }
 
   return (
@@ -268,23 +256,29 @@ const LibraryPage = () => {
 
       <div className="flex min-h-0 flex-1 flex-col gap-md overflow-hidden px-6 pb-6 pt-4">
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-sm rounded-lg border border-border bg-background px-md py-3">
-          <div className="flex flex-wrap items-center gap-sm">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[#5A6065]">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-sm">
+            <span className="shrink-0 text-xs font-semibold uppercase tracking-wide text-[#5A6065]">
               Bulk actions:
             </span>
-            <Select
-              placeholder="Specialty (Multi-select)"
-              options={specialtyOptions}
-              value={specialty}
-              onChange={(event) => setSpecialty(event.target.value)}
-            />
-            <Select
-              placeholder="Document Type"
-              options={documentTypeOptions}
-              value={documentType}
-              onChange={(event) => setDocumentType(event.target.value)}
-            />
-            <Button variant="secondary" size="md" disabled={selectedIds.size === 0}>
+            <div className="min-w-[12rem] flex-1">
+              <Select
+                fullWidth
+                placeholder="Specialty (Multi-select)"
+                options={specialtyOptions}
+                value={specialty}
+                onChange={(event) => setSpecialty(event.target.value)}
+              />
+            </div>
+            <div className="min-w-[12rem] flex-1">
+              <Select
+                fullWidth
+                placeholder="Document Type"
+                options={documentTypeOptions}
+                value={documentType}
+                onChange={(event) => setDocumentType(event.target.value)}
+              />
+            </div>
+            <Button variant="secondary" size="md" disabled={selectedIds.size === 0} className="shrink-0">
               Apply
             </Button>
           </div>

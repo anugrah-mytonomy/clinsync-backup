@@ -54,7 +54,8 @@ const LoginPage = () => {
         onSubmit={onSubmit}
       >
         <Input
-          label="Email"
+          variant="auth"
+          label="Username"
           type="email"
           placeholder="clinic-lead@mytonomy.com"
           autoComplete="email"
@@ -62,9 +63,9 @@ const LoginPage = () => {
           {...register('email')}
         />
         <Input
+          variant="auth"
           label="Password"
           type="password"
-          placeholder="••••••••"
           autoComplete="current-password"
           error={errors.password?.message}
           {...register('password')}
@@ -74,7 +75,7 @@ const LoginPage = () => {
             {submitError}
           </p>
         )}
-        <Button type="submit" fullWidth isLoading={isLoading} disabled={isLoading}>
+        <Button type="submit" fullWidth rounded={false} isLoading={isLoading} disabled={isLoading}>
           Sign In
         </Button>
       </form>

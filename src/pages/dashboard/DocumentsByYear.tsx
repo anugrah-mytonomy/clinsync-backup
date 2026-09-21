@@ -1,9 +1,5 @@
 import ProgressBar from '@/components/ui/ProgressBar';
-
-interface YearRow {
-  year: string;
-  count: number;
-}
+import type { YearRow } from '@/pages/dashboard/types';
 
 const yearRows: YearRow[] = [
   { year: '2026', count: 8 },

@@ -1,4 +1,10 @@
-import type { Finding, RiskLevel, ScanDocument, ScanRun } from '@/types/scanHistory';
+import type {
+  DocumentScanHistoryEntry,
+  Finding,
+  RiskLevel,
+  ScanDocument,
+  ScanRun,
+} from '@/pages/scan-history/types';
 
 export const scanDocuments: ScanDocument[] = [
   {
@@ -337,14 +343,6 @@ export function getHighestRisk(documentFindings: Finding[]): RiskLevel | null {
     }
   }
   return highest;
-}
-
-export interface DocumentScanHistoryEntry {
-  scanId: string;
-  dateTime: string;
-  triggerLabel: string;
-  findingsCount: number;
-  highestRisk: RiskLevel | null;
 }
 
 export function getScanHistoryForDocument(documentId: string): DocumentScanHistoryEntry[] {

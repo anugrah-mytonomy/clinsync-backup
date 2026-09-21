@@ -37,7 +37,6 @@ a real login API endpoint is defined but unused.
 | Forms & validation | react-hook-form + zod | ^7.85.0 / ^4.4.3 |
 | Styling | Tailwind CSS + PostCSS + Autoprefixer | ^3.4.19 |
 | Charts | Recharts | ^3.10.1 |
-| File processing | mammoth (DOCX), jszip (ZIP) | ^1.12.1 / ^3.10.1 |
 | Testing | Vitest, Testing Library, MSW | ^4.1.10 / ^16.3.2 / ^2.15.0 |
 | Lint/format | ESLint (flat config) + typescript-eslint, Prettier | ^10.8.1 / ^3.9.6 |
 
@@ -56,22 +55,23 @@ src/
 ├── components/
 │   ├── layout/          # Sidebar, PageHeader
 │   └── ui/              # Design-system components (Button, Input, CardTable, DonutChart,
-│                         #   PageLoader, ProgressBar, Spinner, icons, uploadFile/)
+│                         #   PageLoader, ProgressBar, Spinner, icons, Select, Table)
 ├── feature/auth/         # authSlice (Redux) + authApiSlice (RTK Query endpoints)
 ├── hooks/useAuth.ts      # Auth hook (Redux state + logout mutation)
 ├── layouts/              # AuthLayout, DashboardLayout
 ├── mocks/                # MSW handlers + server setup (tests)
 ├── pages/
 │   ├── auth/             # LoginPage
-│   ├── content-library/  # ContentLibraryPage + feature doc
-│   └── dashboard/        # DashboardPage + sub-widgets + ReviewQueuePage
+│   ├── content-library/  # LibraryPage, AddContentPage
+│   ├── dashboard/        # DashboardPage + sub-widgets + ReviewQueuePage
+│   └── scan-history/     # Scan history, results, document details, replace
 ├── playground/           # Dev-only component showcase (/playground, dev mode only)
 ├── routes/               # index.tsx, public.routes.tsx, private.routes.tsx, ProtectedRoute.tsx
 ├── schemas/              # zod schemas (loginSchema.ts)
 ├── styles/               # global.css, theme.css (CSS custom properties / design tokens)
 ├── testing/              # setup.ts, testUtils.tsx
-├── types/                # api.ts, contentLibrary.ts
-├── utils/                # cn.ts, contentValidation.ts, formatBytes.ts, simulateUpload.ts
+├── types/                # api.ts, library.ts, addContent.ts, scanHistory.ts
+├── utils/                # cn.ts, addContentValidation.ts, formatBytes.ts, localstackUpload.ts
 └── main.tsx              # App entry (StrictMode, Redux Provider, RouterProvider)
 ```
 
@@ -95,14 +95,13 @@ Path alias `@/*` → `src/*` (configured in `vite.config.ts` and `tsconfig.app.j
 ## Backend / API Integration Points
 
 - **Env vars** (`.env.example`): `VITE_APP_ENV`, `VITE_AUTH_API_URL`
-  (default `http://localhost:4000`). Also referenced: `VITE_MAX_UPLOAD_FILE_SIZE_MB`.
+  (default `http://localhost:4000`). Local dev uploads: `VITE_S3_ENDPOINT`, `VITE_S3_BUCKET`.
 - **Dev proxy**: `vite.config.ts` proxies `/api_auth` → `VITE_AUTH_API_URL`.
 - **Test mocks**: `src/mocks/handlers.ts` (MSW) mocks `POST */login`
   (`test@example.com` / `password123` → `mock-token`) and `POST */logout`.
 - **No other backend exists yet.** Dashboard/findings/scans data is hardcoded in
-  components; uploads are simulated client-side (`src/utils/simulateUpload.ts`), explicitly
-  flagged in `src/pages/content-library/CONTENT_LIBRARY.md` as "replace with real API call
-  when backend is ready."
+  components. Add Content uploads to LocalStack S3 locally; production will use backend
+  presigned URLs.
 
 ## Notable Configuration
 

@@ -54,3 +54,26 @@ export interface ScanRun {
   scanWarnings: number | null;
   workbook: ScanWorkbook;
 }
+
+export interface FindingRow extends Finding {
+  documentTitle: string;
+}
+
+export interface DocumentScanHistoryEntry {
+  scanId: string;
+  dateTime: string;
+  triggerLabel: string;
+  findingsCount: number;
+  highestRisk: RiskLevel | null;
+}
+
+export type RiskBadgeVariant = 'badge' | 'text';
+
+export interface BreadcrumbItem {
+  label: string;
+  to?: string;
+}
+
+export interface BreadcrumbProps {
+  items: BreadcrumbItem[];
+}

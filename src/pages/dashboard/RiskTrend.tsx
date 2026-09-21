@@ -1,34 +1,26 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { cn } from '@/utils/cn';
+import type { DashboardRiskLevel, TooltipPayloadItem, TrendPoint } from '@/pages/dashboard/types';
 
-type RiskLevel = 'high' | 'medium' | 'low';
-
-interface TrendPoint {
-  date: string;
-  high: number;
-  medium: number;
-  low: number;
-}
-
-const riskColors: Record<RiskLevel, string> = {
+const riskColors: Record<DashboardRiskLevel, string> = {
   high: 'rgb(var(--color-danger))',
   medium: '#f59e0b',
   low: 'rgb(var(--color-success))',
 };
 
-const riskDotClasses: Record<RiskLevel, string> = {
+const riskDotClasses: Record<DashboardRiskLevel, string> = {
   high: 'bg-danger',
   medium: 'bg-amber-500',
   low: 'bg-success',
 };
 
-const riskTextClasses: Record<RiskLevel, string> = {
+const riskTextClasses: Record<DashboardRiskLevel, string> = {
   high: 'fill-danger',
   medium: 'fill-amber-600',
   low: 'fill-success',
 };
 
-const legend: { level: RiskLevel; label: string }[] = [
+const legend: { level: DashboardRiskLevel; label: string }[] = [
   { level: 'high', label: 'High' },
   { level: 'medium', label: 'Medium' },
   { level: 'low', label: 'Low' },
@@ -40,7 +32,7 @@ const trendData: TrendPoint[] = [
   { date: 'Sep 1, 2026', high: 1, medium: 4, low: 4 },
 ];
 
-const getHighestSeverity = (point: TrendPoint): RiskLevel => {
+const getHighestSeverity = (point: TrendPoint): DashboardRiskLevel => {
   if (point.high > 0) return 'high';
   if (point.medium > 0) return 'medium';
   return 'low';
@@ -74,11 +66,6 @@ const XAxisTick = ({ x, y, payload }: { x?: number; y?: number; payload?: { valu
     </g>
   );
 };
-
-interface TooltipPayloadItem {
-  dataKey: RiskLevel;
-  value: number;
-}
 
 const RiskTrendTooltip = ({
   active,

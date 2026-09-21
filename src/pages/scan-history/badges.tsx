@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import type { FindingRisk, ScanStatus } from '@/types/scanHistory';
+import type { FindingRisk, RiskBadgeVariant, ScanStatus } from '@/pages/scan-history/types';
 
 const riskTextClasses: Record<FindingRisk, string> = {
   high: 'text-[#9C0E1E]',
@@ -14,8 +14,6 @@ const riskBadgeClasses: Record<FindingRisk, string> = {
   low: 'bg-[#D1E6D7] text-[#125B28]',
   clear: 'bg-[#E5E7EB] text-[#64748B]',
 };
-
-type RiskBadgeVariant = 'badge' | 'text';
 
 export const RiskBadge = ({ risk, variant = 'badge' }: { risk: FindingRisk; variant?: RiskBadgeVariant }) => (
   <span

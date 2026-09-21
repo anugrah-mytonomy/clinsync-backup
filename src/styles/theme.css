@@ -22,4 +22,7 @@
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
+
+  --mt-Border-default: #3538392e;
+  --ColorsEffectsShadowsshadow-xs: rgba(16, 24, 40, 0.05);
 }

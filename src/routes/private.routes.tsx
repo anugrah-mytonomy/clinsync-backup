@@ -7,7 +7,6 @@ import PageLoader from '@/components/ui/PageLoader';
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
 const LibraryPage = lazy(() => import('@/pages/content-library/LibraryPage'));
 const AddContentPage = lazy(() => import('@/pages/content-library/AddContentPage'));
-const ContentLibraryPage = lazy(() => import('@/pages/content-library/ContentLibraryPage'));
 const ScanHistoryPage = lazy(() => import('@/pages/scan-history/ScanHistoryPage'));
 const ScanResultsPage = lazy(() => import('@/pages/scan-history/ScanResultsPage'));
 const DocumentDetailsPage = lazy(() => import('@/pages/scan-history/DocumentDetailsPage'));
@@ -33,10 +32,6 @@ const dashboardRoutes: RouteObject[] = [
   {
     path: '/library/add-content',
     element: withSuspense(<AddContentPage />),
-  },
-  {
-    path: '/dashboard/add-content',
-    element: withSuspense(<ContentLibraryPage />),
   },
   {
     path: '/dashboard/review-queue',

@@ -8,6 +8,7 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>
   error?: string;
   size?: InputSize;
   fullWidth?: boolean;
+  variant?: 'default' | 'auth';
 }
 
 const sizeClasses: Record<InputSize, string> = {
@@ -17,12 +18,18 @@ const sizeClasses: Record<InputSize, string> = {
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, size = 'md', fullWidth = true, id, className, ...props }, ref) => {
+  ({ label, error, size = 'md', fullWidth = true, variant = 'default', id, className, ...props }, ref) => {
     const inputId = id ?? props.name;
 
     return (
       <div className={cn('flex flex-col gap-xs', fullWidth && 'w-full')}>
-        <label htmlFor={inputId} className="text-sm font-medium text-slate-900">
+        <label
+          htmlFor={inputId}
+          className={cn(
+            'text-sm font-medium',
+            variant === 'auth' ? 'text-[#353839CC]' : 'text-slate-900',
+          )}
+        >
           {label}
         </label>
         <input
@@ -30,7 +37,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           aria-invalid={Boolean(error)}
           className={cn(
-            'rounded border border-border bg-background text-slate-900 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20',
+            'rounded border bg-background outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20',
+            variant === 'auth'
+              ? 'border-[var(--mt-Border-default,#3538392E)] text-[#353839CC] shadow-[0px_1px_2px_0px_var(--ColorsEffectsShadowsshadow-xs)] placeholder:text-[#353839CC]/60'
+              : 'border-border text-slate-900',
             sizeClasses[size],
             fullWidth && 'w-full',
             error && 'border-danger focus:border-danger focus:ring-danger/20',

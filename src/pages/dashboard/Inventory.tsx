@@ -1,17 +1,7 @@
 import { AlertIcon } from '@/components/ui/icons';
 import ProgressBar from '@/components/ui/ProgressBar';
 import { cn } from '@/utils/cn';
-
-interface SpecialtyTag {
-  label: string;
-  count: number;
-  flagged?: boolean;
-}
-
-interface DocumentTypeRow {
-  label: string;
-  count: number;
-}
+import type { DocumentTypeRow, SpecialtyTag } from '@/pages/dashboard/types';
 
 const totalTitles = 8;
 const untaggedCount = 2;

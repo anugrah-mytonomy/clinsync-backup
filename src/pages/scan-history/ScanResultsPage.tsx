@@ -5,12 +5,8 @@ import Table, { type TableColumn } from '@/components/ui/Table';
 import Breadcrumb from '@/pages/scan-history/Breadcrumb';
 import { RiskBadge } from '@/pages/scan-history/badges';
 import { getDocumentById, getFindingsForScan, getScanById } from '@/pages/scan-history/scanHistoryMockData';
-import type { Finding } from '@/types/scanHistory';
+import type { FindingRow } from '@/pages/scan-history/types';
 import downloadIcon from '@/assets/Download.svg';
-
-interface FindingRow extends Finding {
-  documentTitle: string;
-}
 
 const ScanResultsPage = () => {
   const { scanId } = useParams<{ scanId: string }>();

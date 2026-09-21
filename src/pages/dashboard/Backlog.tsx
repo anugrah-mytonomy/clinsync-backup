@@ -1,12 +1,6 @@
-type RiskLevel = 'high' | 'medium' | 'low';
+import type { BacklogTile, DashboardRiskLevel } from '@/pages/dashboard/types';
 
-interface BacklogTile {
-  level: RiskLevel;
-  label: string;
-  count: number;
-}
-
-const tileStyles: Record<RiskLevel, { background: string; border: string; color: string }> = {
+const tileStyles: Record<DashboardRiskLevel, { background: string; border: string; color: string }> = {
   high: { background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626' },
   medium: { background: '#FFFBEB', border: '1px solid #FDE68A', color: '#D97706' },
   low: { background: '#F0FDF4', border: '1px solid #BBF7D0', color: '#16A34A' },

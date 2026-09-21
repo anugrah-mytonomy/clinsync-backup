@@ -13,7 +13,9 @@ components are lazy-loaded (`React.lazy` + `Suspense` + `PageLoader` fallback).
 | `/login` | public | `LoginPage` (in `AuthLayout`) | |
 | `/portal` | — | redirect | legacy path → `/dashboard` |
 | `/dashboard` | protected | `DashboardPage` (in `DashboardLayout`) | |
-| `/dashboard/content-library` | protected | `ContentLibraryPage` | |
+| `/library` | protected | `LibraryPage` | |
+| `/library/add-content` | protected | `AddContentPage` | |
+| `/scans` | protected | `ScanHistoryPage` | |
 | `/dashboard/review-queue` | protected | `ReviewQueuePage` | placeholder ("coming soon") |
 | `/playground` | dev-only | `Playground` | gated by `import.meta.env.DEV` |
 | `*` | — | redirect | catch-all → `/dashboard` |
@@ -38,18 +40,13 @@ Protection is enforced by `src/routes/ProtectedRoute.tsx`, which checks
   risk level, awaiting action, "Review Finding" link).
 - `ReviewQueuePage.tsx` — placeholder page titled "Review Queue & Export", not yet built.
 
-### Content Library / Upload (`src/pages/content-library/`)
-- `ContentLibraryPage.tsx` — drag-and-drop upload: dropzone, upload queue, per-file quick +
-  deep validation, sequential upload with simulated progress, "Validate Files" /
-  "Clear Queue" actions.
-- Supported formats: DOCX, PDF, HTML/HTM, ZIP (zip entries individually validated, max
-  nesting depth 1, `__MACOSX/` and dotfiles ignored).
-- Self-documented in `src/pages/content-library/CONTENT_LIBRARY.md` (architecture,
-  state/handler table, types, validation rules, future-improvements checklist).
+### Content Library (`src/pages/content-library/`)
+- `LibraryPage.tsx` — library table, bulk actions, search, scan actions.
+- `AddContentPage.tsx` — drag-and-drop upload with ready/review/rejected states; local dev
+  uploads to LocalStack S3 via `src/utils/localstackUpload.ts`.
 
 ### Not Yet Built (stubbed in nav only)
 Visible in `Sidebar.tsx`'s nav list and commented out in `private.routes.tsx`:
-- Scans (`/dashboard/scans`)
 - Findings & Reports (`/dashboard/findings-reports`)
 - Help & Support (`/dashboard/help`)
 - Settings (`/dashboard/settings`)
@@ -64,10 +61,8 @@ Component showcase mounted only in dev mode: `ButtonPlayground`, `CardTablePlayg
 - `Input`, `Spinner`, `PageLoader`, `ProgressBar`.
 - `CardTable<T>` — generic typed table component.
 - `DonutChart` — Recharts-based pie/donut wrapper.
-- `icons/index.tsx` — hand-rolled inline SVG icon set (Alert, CheckCircle, ContentLibrary,
-  Dashboard, Document, FindingsReports, Help, Logout, MytonomyMark, ReviewQueue, Scans,
-  Settings, Trash, Upload, Video).
-- `uploadFile/` — `UploadDropzone`, `UploadQueue`, `UploadQueueRow`.
+- `icons/index.tsx` — hand-rolled inline SVG icon set.
+- `Select`, `Table` — shared form/table components.
 
 ## Layout Components (`src/components/layout/`)
 
@@ -81,4 +76,4 @@ Component showcase mounted only in dev mode: `ButtonPlayground`, `CardTablePlayg
 - Coverage thresholds enforced: statements 80%, branches 70%, functions 80%, lines 80%
   (excludes `src/mocks/**` and `src/testing/**`).
 - Existing tests cover: `LoginPage`, `authSlice`/`authApiSlice`, layout components
-  (`Sidebar`, `PageHeader`), and utils (`simulateUpload`, etc.).
+  (`Sidebar`, `PageHeader`), and utils.

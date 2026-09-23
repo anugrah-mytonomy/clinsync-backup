@@ -20,10 +20,14 @@ Concretely, it's a tool that:
   Subject-Matter-Expert (SME) review and sign-off.
 - Tracks a review queue, eventually exporting governance reports.
 
-**Current state:** this is a UI-first prototype/scaffold. Dashboard metrics, findings, and
-recent scans are hardcoded mock data. File upload uses a simulated progress bar
-(`simulateFileUpload`), not a real backend. Login always "succeeds" client-side even though
-a real login API endpoint is defined but unused.
+**Current state:** UI-first. Dashboard, library, and scans still use mock data. Add Content
+uploads to LocalStack in local dev. Login calls the real Central Auth API
+(`POST /centralauth/login`) and stores `access_token` in Redux. Stay-signed-in requires the
+auth service to set an HttpOnly `refresh_token` cookie — see
+[`.specify/specs/001-authentication`](./.specify/specs/001-authentication/spec.md).
+
+**Spec-driven development:** product behavior lives in [`.specify/`](./.specify/README.md).
+Constitution: [`.specify/memory/constitution.md`](./.specify/memory/constitution.md).
 
 ## Tech Stack
 
@@ -49,6 +53,7 @@ npm scripts: `dev`, `build:stage`, `build:prod`, `preview`, `lint`, `format` / `
 ## Project Structure
 
 ```
+.specify/                # Spec-driven folder (constitution, templates, specs)
 src/
 ├── app/                 # Redux store + RTK Query base API slice
 ├── assets/              # SVG icons, logo, hero image
@@ -79,29 +84,27 @@ Path alias `@/*` → `src/*` (configured in `vite.config.ts` and `tsconfig.app.j
 
 ## Auth Setup
 
-- **State**: `src/feature/auth/authSlice.ts` — Redux slice holding
-  `{ token, isAuthenticated }`, hydrated from `localStorage['auth_token']` on load.
-- **API layer**: `src/app/api/apiSlice.ts` defines an RTK Query base slice
-  (`reducerPath: 'authApi'`) that attaches `Authorization: Bearer <token>` to requests.
-  `src/feature/auth/authApiSlice.ts` injects `login` (`POST /login`) and `logout`
-  (`POST /logout`) mutations.
-- **Gap**: `LoginPage.tsx` does not call `useLoginMutation` — it fakes a 600ms delay and
-  dispatches a hardcoded `'mock-token'`. `useLogoutMutation` is wired up correctly in
-  `useAuth.ts`.
-- **Route protection**: `src/routes/ProtectedRoute.tsx` checks `useAuth().isAuthenticated`
-  and redirects to `/login` if false. Wraps all `/dashboard/*` routes.
-- **Validation**: `src/schemas/loginSchema.ts` (zod) — valid email + password min 8 chars.
+Canonical spec: [`.specify/specs/001-authentication`](./.specify/specs/001-authentication/spec.md).
+
+- **State**: `src/feature/auth/authSlice.ts` — `{ token }` in Redux memory only. No
+  `localStorage`.
+- **API**: `src/app/api/apiSlice.ts` uses `credentials: 'include'` and
+  `Authorization: Bearer <token>`. Endpoints in `authApiSlice.ts`:
+  `POST /centralauth/login`, `/logout`, `/refresh`.
+- **Boot**: `AuthInitializer` calls refresh when Redux has no token (expects the session
+  cookie). If the auth service does not `Set-Cookie` on login, refresh returns missing
+  token — [gaps.md](./.specify/specs/001-authentication/gaps.md).
+- **Route protection**: `ProtectedRoute` requires Redux token → `/login`.
+- **Validation**: `src/schemas/loginSchema.ts` — email + password min 8; `client_id` `CS`.
 
 ## Backend / API Integration Points
 
 - **Env vars** (`.env.example`): `VITE_APP_ENV`, `VITE_AUTH_API_URL`
   (default `http://localhost:4000`). Local dev uploads: `VITE_S3_ENDPOINT`, `VITE_S3_BUCKET`.
 - **Dev proxy**: `vite.config.ts` proxies `/api_auth` → `VITE_AUTH_API_URL`.
-- **Test mocks**: `src/mocks/handlers.ts` (MSW) mocks `POST */login`
-  (`test@example.com` / `password123` → `mock-token`) and `POST */logout`.
-- **No other backend exists yet.** Dashboard/findings/scans data is hardcoded in
-  components. Add Content uploads to LocalStack S3 locally; production will use backend
-  presigned URLs.
+- **Test mocks**: `src/mocks/handlers.ts` mocks `POST */centralauth/login` (and refresh/logout).
+- **No library/scan/dashboard backend wired yet.** Those pages use mocks. Add Content
+  uploads to LocalStack locally; production will use presigned URLs (`API_LLD.md` §3).
 
 ## Notable Configuration
 
@@ -114,6 +117,5 @@ Path alias `@/*` → `src/*` (configured in `vite.config.ts` and `tsconfig.app.j
   `tsconfig.node.json`), strict mode, `@/*` path alias.
 - **Vite / Vitest** (`vite.config.ts`): jsdom test environment, coverage thresholds enforced
   (statements 80%, branches 70%, functions 80%, lines 80%).
-- **Spec Kit** (added 2026-08-19): `.specify/` + `.claude/skills/speckit-*` — spec-driven
-  workflow commands (`/speckit-specify`, `/speckit-plan`, `/speckit-tasks`,
-  `/speckit-implement`, etc.). This is dev tooling, not a product feature.
+- **Spec-driven workflow**: `.specify/` holds constitution, templates, and feature specs
+  (`.specify/specs/`). Cursor rule: `.cursor/rules/spec-driven.mdc`.

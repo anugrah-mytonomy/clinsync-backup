@@ -1,79 +1,59 @@
 # Clynsync — Features & Routes
 
-For overall tech stack and architecture, see [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md).
+For overall tech stack see [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md).
+
+**Source of truth for behavior is [`.specify/specs/`](./.specify/specs/README.md), not this file.** This is a route index plus pointers.
+
+## Spec index
+
+| Area | Spec | Status |
+|------|------|--------|
+| Auth | [001-authentication](./.specify/specs/001-authentication/spec.md) | Partial — login JSON wired; session cookie not issued by auth service |
+| Shell / routes | [002-app-shell-and-routing](./.specify/specs/002-app-shell-and-routing/spec.md) | Partial |
+| Dashboard | [003-dashboard](./.specify/specs/003-dashboard/spec.md) | Partial — UI, mock data |
+| Library | [004-content-library](./.specify/specs/004-content-library/spec.md) | Partial — UI, mock data |
+| Scan history | [005-scan-history](./.specify/specs/005-scan-history/spec.md) | Partial — UI, mock data |
+| Add content | [006-add-content](./.specify/specs/006-add-content/spec.md) | Partial — validation + LocalStack |
 
 ## Routes
 
-Defined across `src/routes/index.tsx`, `public.routes.tsx`, `private.routes.tsx`. All page
-components are lazy-loaded (`React.lazy` + `Suspense` + `PageLoader` fallback).
+Defined across `src/routes/index.tsx`, `public.routes.tsx`, `private.routes.tsx`. Page
+components are lazy-loaded (`React.lazy` + `Suspense` + `PageLoader`).
 
 | Path | Access | Component | Notes |
 |---|---|---|---|
 | `/` | — | redirect | → `/dashboard` |
-| `/login` | public | `LoginPage` (in `AuthLayout`) | |
+| `/login` | public | `LoginPage` (in `AuthLayout`) | Real `POST /centralauth/login` |
 | `/portal` | — | redirect | legacy path → `/dashboard` |
 | `/dashboard` | protected | `DashboardPage` (in `DashboardLayout`) | |
 | `/library` | protected | `LibraryPage` | |
 | `/library/add-content` | protected | `AddContentPage` | |
 | `/scans` | protected | `ScanHistoryPage` | |
-| `/dashboard/review-queue` | protected | `ReviewQueuePage` | placeholder ("coming soon") |
-| `/playground` | dev-only | `Playground` | gated by `import.meta.env.DEV` |
+| `/scans/:scanId` | protected | `ScanResultsPage` | |
+| `/scans/:scanId/documents/:documentId` | protected | `DocumentDetailsPage` | |
+| `/scans/:scanId/documents/:documentId/replace` | protected | `ReplaceDocumentPage` | |
+| `/dashboard/review-queue` | protected | `ReviewQueuePage` | placeholder |
+| `/playground` | dev-only | `Playground` | `import.meta.env.DEV` |
 | `*` | — | redirect | catch-all → `/dashboard` |
 
-Protection is enforced by `src/routes/ProtectedRoute.tsx`, which checks
-`useAuth().isAuthenticated` and redirects unauthenticated users to `/login`.
+Protection: `src/routes/ProtectedRoute.tsx` requires Redux `access_token` (see auth spec).
 
-## Built Features
+## Auth (do not re-specify here)
 
-### Auth (`src/pages/auth/`)
-- `LoginPage.tsx` — email/password form (react-hook-form + zod). On submit, currently fakes
-  a 600ms delay and dispatches a hardcoded token rather than calling the real login mutation.
+Login calls `useLoginMutation` → Redux `access_token`. Session cookie is **backend `Set-Cookie` only**. See [auth gaps](./.specify/specs/001-authentication/gaps.md) if Cookies is empty or refresh reports missing token.
 
-### Dashboard (`src/pages/dashboard/`)
-- `DashboardPage.tsx` — four summary cards: Content Analyzed, High Risk Findings,
-  SME Review Queue, SME-Verified Content (all mock numbers).
-- `OverallRiskDistribution.tsx` — donut chart (via shared `DonutChart`) of High/Medium/Low
-  risk finding counts.
-- `RecentScans.tsx` — list of recent scans with status badges (Verified / High Risk /
-  Medium Risk).
-- `FindingsRequiringAttention.tsx` — `CardTable` of findings (description, source document,
-  risk level, awaiting action, "Review Finding" link).
-- `ReviewQueuePage.tsx` — placeholder page titled "Review Queue & Export", not yet built.
+## Nav stubs (no spec yet)
 
-### Content Library (`src/pages/content-library/`)
-- `LibraryPage.tsx` — library table, bulk actions, search, scan actions.
-- `AddContentPage.tsx` — drag-and-drop upload with ready/review/rejected states; local dev
-  uploads to LocalStack S3 via `src/utils/localstackUpload.ts`.
+In `Sidebar.tsx`, not routed in `private.routes.tsx`:
 
-### Not Yet Built (stubbed in nav only)
-Visible in `Sidebar.tsx`'s nav list and commented out in `private.routes.tsx`:
-- Findings & Reports (`/dashboard/findings-reports`)
 - Help & Support (`/dashboard/help`)
 - Settings (`/dashboard/settings`)
+- Findings & Reports (commented)
 
-### Dev-only Playground (`src/playground/`)
-Component showcase mounted only in dev mode: `ButtonPlayground`, `CardTablePlayground`,
-`DonutChartPlayground`, `InputPlayground`, `PageLoaderPlayground`, `SpinnerPlayground`.
+## Shared UI
 
-## Shared UI Component Library (`src/components/ui/`)
+`src/components/ui/` — Button, Input, Spinner, PageLoader, ProgressBar, CardTable, DonutChart, Select, Table, uploadFile, icons.
 
-- `Button` — variants primary/secondary/danger/ghost; sizes sm/md/lg; loading state.
-- `Input`, `Spinner`, `PageLoader`, `ProgressBar`.
-- `CardTable<T>` — generic typed table component.
-- `DonutChart` — Recharts-based pie/donut wrapper.
-- `icons/index.tsx` — hand-rolled inline SVG icon set.
-- `Select`, `Table` — shared form/table components.
+## Testing
 
-## Layout Components (`src/components/layout/`)
-
-- `Sidebar.tsx` — left nav ("Clinic AI Portal" branding), user footer, logout button.
-- `PageHeader.tsx` — reusable page title/subtitle/actions header bar.
-
-## Testing Setup
-
-- Vitest + jsdom, Testing Library, MSW for API mocking.
-- `src/mocks/handlers.ts` mocks `/login` and `/logout`.
-- Coverage thresholds enforced: statements 80%, branches 70%, functions 80%, lines 80%
-  (excludes `src/mocks/**` and `src/testing/**`).
-- Existing tests cover: `LoginPage`, `authSlice`/`authApiSlice`, layout components
-  (`Sidebar`, `PageHeader`), and utils.
+Vitest + jsdom + Testing Library + MSW. Coverage thresholds in `vite.config.ts`.

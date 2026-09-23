@@ -90,6 +90,12 @@ const LibraryPage = () => {
       width: 140,
       render: (doc) => <span className="font-medium text-[13px] text-slate-900">{doc.title}</span>,
     },
+        {
+      key: 'scanId',
+      header: 'Scan ID',
+      width: 70,
+      render: (doc) => <span className="text-[13px] text-[#353839">S12456654</span>,
+    },
     {
       key: 'specialties',
       header: (
@@ -282,10 +288,6 @@ const LibraryPage = () => {
               Apply
             </Button>
           </div>
-
-          <span className="text-xs font-medium text-[#353839]">
-            {assignedCount} Assigned · {unassignedCount} Unassigned
-          </span>
         </div>
 
         <div className="flex shrink-0 items-center gap-2">

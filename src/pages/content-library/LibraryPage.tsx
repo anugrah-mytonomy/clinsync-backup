@@ -44,9 +44,6 @@ const LibraryPage = () => {
   const safePage = Math.min(page, pageCount);
   const pagedDocuments = filteredDocuments.slice((safePage - 1) * pageSize, safePage * pageSize);
 
-  const assignedCount = documents.filter((doc) => !doc.specialties.includes('Unassigned')).length;
-  const unassignedCount = documents.length - assignedCount;
-
   const specialtyOptions = useMemo(() => {
     const values = [...new Set(documents.flatMap((doc) => doc.specialties))];
     return values.map((value) => ({ value, label: value }));

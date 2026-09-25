@@ -1,38 +1,36 @@
-# ClinSync (Clynsync)
+# ClinSync
 
-Clinic AI Portal frontend. **Spec-driven:** start at [`.specify/README.md`](./.specify/README.md).
+Clinic AI Portal frontend (React + TypeScript + Vite).
 
----
+**Spec-driven:** behavior is defined in [`.specify/`](./.specify/README.md) before code changes.
 
-# React + TypeScript + Vite
+## First-time setup
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+copy .env.example .env          # Windows — create local env
+npm run localstack:up           # Docker — required for Add Content upload in dev
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Auth expects Central Auth at `VITE_AUTH_API_URL` (default `http://localhost:4000`). See [auth gaps](./.specify/specs/001-authentication/gaps.md) if login works but cookies stay empty.
+
+LocalStack details: [`LOCALSTACK.md`](./LOCALSTACK.md). Architecture: [`PROJECT_OVERVIEW.md`](./PROJECT_OVERVIEW.md). API index: [`API_LLD.md`](./API_LLD.md).
+
+## Scripts
+
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Dev server |
+| `npm run build:stage` / `build:prod` | Production build |
+| `npm test` | Vitest |
+| `npm run typecheck` | TypeScript |
+| `npm run lint` | ESLint |
+
+## Routes
+
+| Path | Notes |
+|------|-------|
+| `/login` | Public |
+| `/dashboard`, `/library`, `/library/add-content`, `/scans/*` | Protected (Redux token) |
+| `/playground` | Dev only — local folder gitignored; ignore if missing |

@@ -4,6 +4,14 @@
 **Created**: 2026-09-22
 **Status**: Partial (pages + mock data; scan APIs not wired)
 
+## In short
+
+Three connected pages: a list of every scan that's run (`/scans`), the
+findings inside one scan (`/scans/:scanId`), and the detail + replace flow
+for one flagged document. A finding's risk can be high, medium, low, or
+`clear` (meaning it was checked and is fine). Everything here still reads
+from mock data — the real scan/findings APIs aren't wired up yet.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Review past scans (Priority: P1)

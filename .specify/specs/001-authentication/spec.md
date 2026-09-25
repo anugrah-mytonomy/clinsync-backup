@@ -5,6 +5,15 @@
 **Status**: Partial (UI login wired; session cookie contract not fulfilled by auth service)
 **Input**: Central auth login, in-memory access token, HttpOnly refresh cookie, silent refresh on boot
 
+## In short
+
+Log in with email + password. The short-lived access token lives only in
+memory (Redux) — never in `localStorage`. Staying logged in across a page
+reload depends on a second, longer-lived credential that only the backend
+can set (a secure cookie JavaScript can't touch). Today the backend isn't
+setting that cookie yet, so a reload logs people out even though login
+itself works — see [`gaps.md`](./gaps.md) for the exact symptom and fix.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Sign in (Priority: P1)

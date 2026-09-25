@@ -117,5 +117,4 @@ Canonical spec: [`.specify/specs/001-authentication`](./.specify/specs/001-authe
   `tsconfig.node.json`), strict mode, `@/*` path alias.
 - **Vite / Vitest** (`vite.config.ts`): jsdom test environment, coverage thresholds enforced
   (statements 80%, branches 70%, functions 80%, lines 80%).
-- **Spec-driven workflow**: `.specify/` holds constitution, templates, and feature specs
-  (`.specify/specs/`). Cursor rule: `.cursor/rules/spec-driven.mdc`.
+- **Spec-driven workflow**: [`.specify/`](./.specify/README.md) — constitution + specs for auth and add content. Cursor rule: `.cursor/rules/spec-driven.mdc`.

@@ -4,6 +4,14 @@
 **Created**: 2026-09-22
 **Status**: Partial (UI with hardcoded data; `GET /dashboard/summary` not wired)
 
+## In short
+
+The landing page after login: a quick health check of the whole library —
+how many titles, how much is scanned, what's high/medium/low risk, and a
+trend over time. Every number on this page is currently fake (hardcoded in
+the component), because the real summary API doesn't exist yet. Changing
+the date-range tab doesn't actually refetch anything today.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Library health at a glance (Priority: P1)

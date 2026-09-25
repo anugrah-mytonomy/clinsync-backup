@@ -2,6 +2,11 @@
 
 Recorded 2026-09-22. Update this file when T001–T010 close.
 
+**In short**: login works and the dashboard loads, but reload the page and
+you're back at `/login`. That's because the backend's login response isn't
+sending `Set-Cookie` yet, so the browser never stores a session cookie — the
+frontend has nothing wrong to fix here. See "Classification" below.
+
 ## Observed
 
 - Application → Cookies for `http://localhost:5174` is empty after login.

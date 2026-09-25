@@ -4,6 +4,14 @@
 **Created**: 2026-09-22
 **Status**: Partial (table UI + mock data; list/mutate APIs not wired)
 
+## In short
+
+The `/library` page: a searchable, paginated table of every clinical
+document, with bulk actions (scan selected / scan everything) and per-row
+actions (edit, replace, download, delete). The table and search work
+against fake in-memory data right now — no real list/search/mutate API is
+connected yet, so nothing here persists after a refresh.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Browse titles (Priority: P1)

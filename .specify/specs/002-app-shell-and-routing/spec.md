@@ -4,6 +4,15 @@
 **Created**: 2026-09-22
 **Status**: Partial (core routes shipped; Help, Settings, Findings Reports are nav-only)
 
+## In short
+
+This is the frame everything else sits inside: the sidebar, the login gate,
+and which URL shows which page. If you're logged in, every route sends you
+into the dashboard shell; if you're not, every route sends you to `/login`.
+Two sidebar links (Help & Support, Settings) exist visually but don't go
+anywhere real yet — that's intentional, not a bug, until those pages get
+their own spec.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Reach the portal (Priority: P1)

@@ -7,9 +7,8 @@ alwaysApply: true
 
 Behavior and API contracts live in `.specify/specs/` (constitution: `.specify/memory/constitution.md`).
 
-- Before changing user-visible behavior, cookies, tokens, storage, routes, or HTTP APIs, read the matching spec. Auth is `.specify/specs/001-authentication/` — including `contracts/auth.md` and `gaps.md`.
-- If code and spec disagree, change the spec first or change the code to match. Do not add unspecified cookies, `localStorage` tokens, or headers.
-- The UI never writes auth cookies. `credentials: 'include'` does not create them. Login `Set-Cookie` is backend-only (`refresh_token`).
-- New features: copy `.specify/templates/` into `.specify/specs/NNN-name/`, then implement tasks only.
-- Do not treat `FEATURES.md` or `PROJECT_OVERVIEW.md` as the contract; they index `.specify/specs/`.
-- Do not create a second `specs/` folder at the repo root.
+- Before changing user-visible behavior, cookies, tokens, storage, routes, or HTTP APIs, read the matching spec. Auth: `.specify/specs/001-authentication/` (`contracts/auth.md`, `gaps.md`). Upload: `.specify/specs/006-add-content/`.
+- If code and spec disagree, change the spec first or change the code to match.
+- The UI never writes auth cookies. Login `Set-Cookie` is backend-only (`refresh_token`).
+- New features: copy `.specify/templates/spec-template.md` into `.specify/specs/NNN-name/spec.md`.
+- `API_LLD.md` indexes APIs; auth contract in `.specify/specs/001-authentication/contracts/auth.md` wins on conflicts.

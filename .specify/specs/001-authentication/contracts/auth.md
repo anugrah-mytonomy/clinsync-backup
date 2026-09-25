@@ -2,6 +2,12 @@
 
 Canonical contract for ClinSync ↔ Central Auth. Frontend and backend MUST match this file. If this file and `API_LLD.md` disagree, this file wins.
 
+**In short**: there is exactly one cookie in this whole product — `refresh_token`,
+set by the backend on login, HttpOnly (JavaScript can never read or write it).
+Everything below is the precise recipe for that one cookie: its name, its
+flags, and which endpoint sets or clears it. If you're debugging "why is the
+Cookies tab empty," the answer is always somewhere on this page.
+
 **Base URL**
 
 | Environment | Browser calls | Upstream |

@@ -4,6 +4,16 @@
 **Created**: 2026-09-22
 **Status**: Partial (client validation + LocalStack upload in dev; production presigned-URL API not wired)
 
+## In short
+
+Drag files onto `/library/add-content` and each one gets sorted into
+**ready** (good to go), **review** (duplicate name — needs a human look), or
+**rejected** (wrong file type, empty, or over 5 GB), with a plain-English
+reason shown for rejects. In production, uploads are meant to go straight to
+storage via a presigned URL — the frontend should never see real AWS
+credentials. Until that's wired, local dev uploads go through LocalStack
+instead so the flow can still be tested end-to-end.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Upload clinical files (Priority: P1)

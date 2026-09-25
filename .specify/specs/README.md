@@ -1,23 +1,32 @@
 # ClinSync Specs
 
-This folder is the **source of truth** for product behavior. Code follows these specs. If code and spec disagree, fix the spec first or change the code to match — do not leave a silent gap.
+This folder describes **what the product actually does** — page by page,
+feature by feature. If you're not sure how something is supposed to behave,
+the answer is in here, not in a guess.
 
-Governing rules: [`../memory/constitution.md`](../memory/constitution.md).
+Rule: code must match what's written here. If they disagree, that's a bug —
+fix the spec or fix the code, don't leave it unresolved.
 
-## Workflow
+House rules for the whole project: [`../memory/constitution.md`](../memory/constitution.md).
+
+## How a feature gets built here
 
 ```
-specify → contract → plan → tasks → implement → converge
+write the spec → (add a contract, if it talks to an API) → plan it → break into tasks → build it → check it still matches
 ```
 
-1. Copy templates from `.specify/templates/` into a new `.specify/specs/NNN-feature-name/` directory.
-2. Write `spec.md` (what / why). Mark unknowns as `NEEDS CLARIFICATION`.
-3. If the work crosses HTTP, cookies, or storage, add `contracts/`.
-4. Write `plan.md` and `tasks.md`.
-5. Implement only listed tasks.
-6. After shipping, set status to `Implemented` or `Partial` and record remaining gaps.
+1. Copy `.specify/templates/` into a new `.specify/specs/NNN-feature-name/` folder.
+2. Write `spec.md` — what it does and why. If something's genuinely unknown,
+   write `NEEDS CLARIFICATION` instead of guessing.
+3. If it touches an HTTP API, cookies, or storage, add a `contracts/` file
+   describing that exact shape (request/response, cookie names, etc).
+4. Write `plan.md` (how you'll build it) and `tasks.md` (the checklist).
+5. Build only what the tasks describe.
+6. Once shipped, mark the spec `Implemented` or `Partial`, and note anything
+   still missing.
 
-Do not put implementation-only notes in `FEATURES.md` or `PROJECT_OVERVIEW.md`. Those files index this folder.
+`FEATURES.md` / `PROJECT_OVERVIEW.md` are just an index pointing here — the
+real detail always lives in this folder.
 
 ## Index
 

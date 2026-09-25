@@ -2,7 +2,7 @@
 
 This document describes the API contracts the **ClinSync UI** expects, based on current pages, mock data, and TypeScript types.
 
-**Spec-driven:** user-facing behavior and the auth cookie/token split are defined in [`.specify/specs/`](./.specify/specs/README.md). If this file and a spec contract disagree, the spec wins — then this file must be updated.
+**Spec-driven:** auth and upload behavior are defined in [`.specify/`](./.specify/README.md). If this file and a spec contract disagree, the spec wins — then update this file.
 
 **Status today**
 

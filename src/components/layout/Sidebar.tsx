@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { HelpIcon, LogoutIcon, SettingsIcon } from '@/components/ui/icons';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth, useOrganization } from '@/hooks/useAuth';
 import userAvatar from '@/assets/User_Avatar.svg';
 import logoIcon from '@/assets/Logo_icon.svg';
 import dashboardIcon from '@/assets/Dashboard.svg';
@@ -28,15 +28,23 @@ const menuItemClasses =
 
 const Sidebar = () => {
   const { logout } = useAuth();
+  const organization = useOrganization();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const logoSrc = (organization?.config.logo_url as string | undefined) || logoIcon;
 
   return (
     <aside className="sticky top-0 flex h-screen w-16 shrink-0 flex-col border-r border-border bg-background md:w-[200px]">
       <div className="flex h-[64px] shrink-0 items-center gap-2.5 px-xs md:px-md">
-        <img src={logoIcon} alt="" className="h-8 w-8 shrink-0" aria-hidden="true" />
+        <img
+          src={logoSrc}
+          alt=""
+          className="h-8 w-8 shrink-0 object-contain"
+          aria-hidden="true"
+          onError={(event) => (event.currentTarget.src = logoIcon)}
+        />
         <div className="hidden leading-tight md:block">
           <p className="text-xl font-semibold text-slate-900">ClinSync</p>
-          <p className="text-sm text-[#6B7387]">Mytonomy</p>
+          <p className="text-sm text-[#6B7387]">{organization?.name}</p>
         </div>
       </div>
 

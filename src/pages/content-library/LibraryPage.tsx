@@ -87,11 +87,11 @@ const LibraryPage = () => {
       width: 140,
       render: (doc) => <span className="font-medium text-[13px] text-slate-900">{doc.title}</span>,
     },
-        {
+    {
       key: 'scanId',
       header: 'Scan ID',
       width: 70,
-      render: (doc) => <span className="text-[13px] text-[#353839">S12456654</span>,
+      render: () => <span className="text-[13px] text-[#353839]">S12456654</span>,
     },
     {
       key: 'specialties',

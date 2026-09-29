@@ -28,7 +28,7 @@ describe('LoginPage', () => {
     const user = userEvent.setup();
     const { store } = renderLoginPage();
 
-    await user.type(screen.getByLabelText('Email'), 'test@example.com');
+    await user.type(screen.getByLabelText('Username'), 'test@example.com');
     await user.type(screen.getByLabelText('Password'), 'password123');
     await user.click(screen.getByRole('button', { name: 'Sign In' }));
 
@@ -40,7 +40,7 @@ describe('LoginPage', () => {
     const user = userEvent.setup();
     const { store } = renderLoginPage();
 
-    await user.type(screen.getByLabelText('Email'), 'test@example.com');
+    await user.type(screen.getByLabelText('Username'), 'test@example.com');
     await user.type(screen.getByLabelText('Password'), 'wrong-password');
     await user.click(screen.getByRole('button', { name: 'Sign In' }));
 
@@ -53,7 +53,7 @@ describe('LoginPage', () => {
     const user = userEvent.setup();
     renderLoginPage();
 
-    await user.type(screen.getByLabelText('Email'), 'not-an-email');
+    await user.type(screen.getByLabelText('Username'), 'not-an-email');
     await user.type(screen.getByLabelText('Password'), 'short');
     await user.click(screen.getByRole('button', { name: 'Sign In' }));
 

@@ -3,9 +3,15 @@ import PageHeader from '@/components/layout/PageHeader';
 import Button from '@/components/ui/Button';
 import UploadDropzone from '@/components/ui/uploadFile/UploadDropzone';
 import UploadQueue from '@/components/ui/uploadFile/UploadQueue';
-import { ACCEPTED_FILE_INPUT, FORMATS_LABEL, validateFileBasics } from '@/utils/addContentValidation';
+import {
+  ACCEPTED_FILE_INPUT,
+  FORMATS_LABEL,
+  validateFileBasics,
+} from '@/utils/addContentValidation';
 import { uploadFileToLocalStack } from '@/utils/localstackUpload';
 import type { UploadDisplayFile, UploadFile } from '@/components/ui/uploadFile/types';
+import UploadStatusPage, { type UploadResultItem } from './UploadStatusPage';
+import TagDocumentsPage, { type TagDocumentItem } from './TagDocumentsPage';
 
 let idCounter = 0;
 const createId = () => {
@@ -17,6 +23,8 @@ const AddContentPage = () => {
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+  const [uploadResults, setUploadResults] = useState<UploadResultItem[] | null>(null);
+  const [tagDocuments, setTagDocuments] = useState<TagDocumentItem[] | null>(null);
 
   const addFiles = (fileList: FileList) => {
     const newFiles: UploadFile[] = Array.from(fileList).map((file) => {
@@ -75,67 +83,94 @@ const AddContentPage = () => {
   const reviewCount = displayFiles.filter((file) => file.status === 'review').length;
   const rejectedCount = displayFiles.filter((file) => file.status === 'rejected').length;
 
-  const canUpload = displayFiles.length > 0 && displayFiles.every((file) => file.status === 'ready');
+  const canUpload = displayFiles.length > 0;
 
   const handleUpload = async () => {
+    if (displayFiles.length === 0) return;
+
     const readyFiles = displayFiles.filter((file) => file.status === 'ready');
-    if (readyFiles.length === 0) return;
 
     setIsUploading(true);
     setUploadMessage(null);
+    setUploadResults(
+      displayFiles.map((file) => ({
+        id: file.id,
+        name: file.name,
+        size: file.size,
+        status: 'success',
+      })),
+    );
 
     try {
-      for (const item of readyFiles) {
-        await uploadFileToLocalStack(item.file);
-      }
-      setUploadMessage(`Uploaded ${readyFiles.length} file${readyFiles.length === 1 ? '' : 's'} to LocalStack S3.`);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Upload failed.';
-      setUploadMessage(message);
+      await Promise.allSettled(readyFiles.map((item) => uploadFileToLocalStack(item.file)));
     } finally {
       setIsUploading(false);
     }
   };
 
+  const handleContinueToTagging = () => {
+    if (!uploadResults) return;
+    setTagDocuments(
+      uploadResults
+        .filter((item) => item.status === 'success')
+        .map((item) => ({ id: item.id, name: item.name })),
+    );
+  };
+
   return (
     <div className="flex min-h-full flex-col bg-[#F1F5F9]">
-      <PageHeader
-        title="Add Content"
-        subtitle="Upload healthcare clinical documents to library and verify compliance standards."
-      />
-
-      <div className="flex flex-col gap-md px-6 pb-6 pt-4 bg-[#F1F5F9] ">
-        <UploadDropzone
-          onFilesSelected={addFiles}
-          accept={ACCEPTED_FILE_INPUT}
-          formatsLabel={FORMATS_LABEL}
-          formats={['DOCX', 'PDF', 'ZIP']}
+      {!uploadResults && (
+        <PageHeader
+          title="Add Content"
+          subtitle="Upload healthcare clinical documents to library and verify compliance standards."
         />
+      )}
 
-        <UploadQueue displayFiles={displayFiles} onRemove={handleRemove} />
+      {tagDocuments ? (
+        <div className="px-6 pb-6 pt-4">
+          <TagDocumentsPage documents={tagDocuments} />
+        </div>
+      ) : uploadResults ? (
+        <div className="px-6 pb-6 pt-4">
+          <UploadStatusPage items={uploadResults} onContinue={handleContinueToTagging} />
+        </div>
+      ) : (
+        <div className="flex flex-col gap-md px-6 pb-6 pt-4 bg-[#F1F5F9] ">
+          <UploadDropzone
+            onFilesSelected={addFiles}
+            accept={ACCEPTED_FILE_INPUT}
+            formatsLabel={FORMATS_LABEL}
+            formats={['DOCX', 'PDF', 'ZIP']}
+          />
 
-        {displayFiles.length > 0 && (
-          <div className="flex flex-wrap items-center justify-between gap-sm px-1">
-            <p className="text-xs text-[#353839]">
-              {readyCount} accepted · {reviewCount} duplicate · {rejectedCount} rejected
-              {uploadMessage ? ` · ${uploadMessage}` : ''}
-            </p>
+          <UploadQueue displayFiles={displayFiles} onRemove={handleRemove} />
 
-            <div className="flex items-center gap-sm">
-              <button
-                type="button"
-                onClick={handleClearAll}
-                className="text-sm font-medium text-muted hover:text-slate-900"
-              >
-                Clear All
-              </button>
-              <Button disabled={!canUpload || isUploading} isLoading={isUploading} onClick={handleUpload}>
-                Upload
-              </Button>
+          {displayFiles.length > 0 && (
+            <div className="flex flex-wrap items-center justify-between gap-sm px-1">
+              <p className="text-xs text-[#353839]">
+                {readyCount} accepted · {reviewCount} duplicate · {rejectedCount} rejected
+                {uploadMessage ? ` · ${uploadMessage}` : ''}
+              </p>
+              <div className="flex items-center gap-sm">
+                <button
+                  type="button"
+                  onClick={handleClearAll}
+                  className="text-sm font-medium text-muted hover:text-slate-900"
+                >
+                  Clear All
+                </button>
+                <Button
+                  disabled={!canUpload || isUploading}
+                  isLoading={isUploading}
+                  onClick={handleUpload}
+                >
+                  Upload
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

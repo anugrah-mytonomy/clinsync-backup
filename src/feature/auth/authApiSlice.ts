@@ -1,5 +1,5 @@
-import { authApiSlice } from '@/app/api/apiSlice';
-import type { LoginRequest, LoginResponse } from '@/feature/auth/authApiSlice.types';
+import { authApiSlice, clinsyncApiSlice } from '@/app/api/apiSlice';
+import type { LoginRequest, LoginResponse, Session } from '@/feature/auth/authApiSlice.types';
 
 export type { LoginRequest, LoginResponse };
 
@@ -31,3 +31,16 @@ const injectedAuthApiSlice = authApiSlice.injectEndpoints({
 });
 
 export const { useLoginMutation, useLogoutMutation, useRefreshMutation } = injectedAuthApiSlice;
+
+const injectedClinsyncApiSlice = clinsyncApiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    // The argument is the current access token. It isn't sent (the base query adds the
+    // Authorization header); it keys the cache so a refreshed token refetches the session.
+    getSession: builder.query<Session, string>({
+      query: () => '/api/v1/session',
+      providesTags: ['Session'],
+    }),
+  }),
+});
+
+export const { useGetSessionQuery } = injectedClinsyncApiSlice;

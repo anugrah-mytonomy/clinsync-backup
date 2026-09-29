@@ -1,4 +1,11 @@
-import { useEffect, useId, useRef, useState, type ChangeEvent, type SelectHTMLAttributes } from 'react';
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type SelectHTMLAttributes,
+} from 'react';
 import { cn } from '@/utils/cn';
 import { ChevronDownIcon } from '@/components/ui/icons';
 
@@ -11,6 +18,8 @@ interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'siz
   options: SelectOption[];
   placeholder?: string;
   fullWidth?: boolean;
+  width?: number | string;
+  height?: number | string;
 }
 
 const SELECT_BORDER = '1px solid #3538392E';
@@ -19,6 +28,8 @@ const Select = ({
   options,
   placeholder,
   fullWidth = false,
+  width,
+  height,
   className,
   id,
   disabled,
@@ -30,6 +41,7 @@ const Select = ({
   const selectId = id ?? generatedId;
   const containerRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [openUp, setOpenUp] = useState(false);
   const selected = options.find((option) => option.value === value);
 
   useEffect(() => {
@@ -51,21 +63,29 @@ const Select = ({
   };
 
   return (
-    <div ref={containerRef} className={cn('relative', fullWidth ? 'w-full' : 'w-[200px]')}>
+    <div
+      ref={containerRef}
+      className={cn('relative', width === undefined && (fullWidth ? 'w-full' : 'w-[200px]'))}
+      style={width === undefined ? undefined : { width }}
+    >
       <button
         id={selectId}
         type="button"
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={open}
-        onClick={() => setOpen((current) => !current)}
+        onClick={() => {
+          const rect = containerRef.current?.getBoundingClientRect();
+          setOpenUp(!!rect && window.innerHeight - rect.bottom < 250 && rect.top > 250);
+          setOpen((current) => !current);
+        }}
         className={cn(
           'flex h-9 w-full items-center justify-between rounded-[6px] bg-background px-3 text-left text-sm text-slate-900 outline-none transition-colors',
           'focus:ring-2 focus:ring-primary/20',
           'disabled:cursor-not-allowed disabled:opacity-60',
           className,
         )}
-        style={{ border: SELECT_BORDER }}
+        style={{ border: SELECT_BORDER, height }}
       >
         <span className={cn('truncate', !selected && 'text-slate-500')}>
           {selected?.label ?? placeholder}
@@ -77,7 +97,10 @@ const Select = ({
         <ul
           role="listbox"
           aria-labelledby={selectId}
-          className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-[6px] bg-background py-1 shadow-sm"
+          className={cn(
+            'absolute z-20 max-h-60 w-full overflow-auto rounded-[6px] bg-background py-1 shadow-sm',
+            openUp ? 'bottom-full mb-1' : 'mt-1',
+          )}
           style={{ border: SELECT_BORDER }}
         >
           {options.map((option) => {

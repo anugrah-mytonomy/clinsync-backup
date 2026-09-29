@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authApiSlice } from '@/app/api/apiSlice';
+import { authApiSlice, clinsyncApiSlice } from '@/app/api/apiSlice';
 import authReducer from '@/feature/auth/authSlice';
 
 export const setupStore = () =>
@@ -7,9 +7,10 @@ export const setupStore = () =>
     reducer: {
       auth: authReducer,
       [authApiSlice.reducerPath]: authApiSlice.reducer,
+      [clinsyncApiSlice.reducerPath]: clinsyncApiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(authApiSlice.middleware),
+      getDefaultMiddleware().concat(authApiSlice.middleware, clinsyncApiSlice.middleware),
   });
 
 export const store = setupStore();

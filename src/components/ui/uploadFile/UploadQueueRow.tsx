@@ -36,7 +36,12 @@ const UploadQueueRow = ({ block, onRemove }: UploadQueueRowProps) => {
             <p className="text-xs text-muted">{formatBytes(item.size)}</p>
           </div>
           <div className="flex shrink-0 items-center gap-sm">
-            <span className={cn('rounded-full px-2.5 py-1 text-xs font-semibold', statusBadgeClasses.ready)}>
+            <span
+              className={cn(
+                'rounded-full px-2.5 py-1 text-xs font-semibold',
+                statusBadgeClasses.ready,
+              )}
+            >
               {statusLabels.ready}
             </span>
             <button
@@ -103,7 +108,12 @@ const UploadQueueRow = ({ block, onRemove }: UploadQueueRowProps) => {
           <p className="truncate text-sm font-medium text-danger">{item.name}</p>
           <p className="text-xs text-danger/80">{item.note}</p>
         </div>
-        <span className={cn('shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold', statusBadgeClasses.rejected)}>
+        <span
+          className={cn(
+            'shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold',
+            statusBadgeClasses.rejected,
+          )}
+        >
           {statusLabels.rejected}
         </span>
         <button

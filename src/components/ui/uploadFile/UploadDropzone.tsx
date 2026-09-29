@@ -9,7 +9,12 @@ interface UploadDropzoneProps {
   formats: string[];
 }
 
-const UploadDropzone = ({ onFilesSelected, accept, formatsLabel, formats }: UploadDropzoneProps) => {
+const UploadDropzone = ({
+  onFilesSelected,
+  accept,
+  formatsLabel,
+  formats,
+}: UploadDropzoneProps) => {
   const [isDragActive, setIsDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -48,7 +53,9 @@ const UploadDropzone = ({ onFilesSelected, accept, formatsLabel, formats }: Uplo
       </span>
       <div className="mt-2 flex flex-col gap-2">
         <p className="text-sm text-slate-900">
-          <span className="font-bold text-sm text-[#0F172A]">Drag files here or browse your system</span>
+          <span className="font-bold text-sm text-[#0F172A]">
+            Drag files here or browse your system
+          </span>
         </p>
         <p className="text-xs text-[#94A3B8] font-normal">{formatsLabel}</p>
         <div className="mt-1 flex items-center justify-center gap-2">

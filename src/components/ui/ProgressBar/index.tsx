@@ -29,7 +29,10 @@ const ProgressBar = ({ value, variant = 'primary', label, className }: ProgressB
       className={cn('h-1.5 w-full overflow-hidden rounded-full bg-border', className)}
     >
       <div
-        className={cn('h-full rounded-full transition-[width] duration-150', variantClasses[variant])}
+        className={cn(
+          'h-full rounded-full transition-[width] duration-150',
+          variantClasses[variant],
+        )}
         style={{ width: `${clamped}%` }}
       />
     </div>

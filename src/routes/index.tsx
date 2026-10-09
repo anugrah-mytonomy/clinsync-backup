@@ -2,17 +2,17 @@ import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-do
 import { publicRoutes } from '@/routes/public.routes';
 import { privateRoutes } from '@/routes/private.routes';
 
-const devPlaygroundRoutes: RouteObject[] = import.meta.env.DEV
-  ? [
-      {
-        path: '/playground',
-        lazy: () =>
-          import('@/playground').then((module) => ({
-            Component: module.Playground,
-          })),
-      },
-    ]
-  : [];
+// const devPlaygroundRoutes: RouteObject[] = import.meta.env.DEV
+//   ? [
+//       {
+//         path: '/playground',
+//         lazy: () =>
+//           import('@/playground').then((module) => ({
+//             Component: module.Playground,
+//           })),
+//       },
+//     ]
+//   : [];
 
 export const router = createBrowserRouter([
   {
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
   },
   ...publicRoutes,
   ...privateRoutes,
-  ...devPlaygroundRoutes,
+  // ...devPlaygroundRoutes,
   {
     path: '*',
     element: <Navigate to="/dashboard" replace />,

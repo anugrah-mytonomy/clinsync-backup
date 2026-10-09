@@ -9,13 +9,12 @@ Clinic AI Portal frontend (React + TypeScript + Vite).
 ```bash
 npm install
 copy .env.example .env          # Windows — create local env
-npm run localstack:up           # Docker — required for Add Content upload in dev
 npm run dev
 ```
 
-Auth expects Central Auth at `VITE_AUTH_API_URL` (default `http://localhost:4000`). See [auth gaps](./.specify/specs/001-authentication/gaps.md) if login works but cookies stay empty.
+Auth: align `VITE_AUTH_API_URL` with ClinSync `AUTH_*` (see `.env.example`). [Auth gaps](./.specify/specs/001-authentication/gaps.md). Add Content upload uses the backend presigned-URL API when wired ([006 spec](./.specify/specs/006-add-content/spec.md)).
 
-LocalStack details: [`LOCALSTACK.md`](./LOCALSTACK.md). Architecture: [`PROJECT_OVERVIEW.md`](./PROJECT_OVERVIEW.md). API index: [`API_LLD.md`](./API_LLD.md).
+Architecture: [`PROJECT_OVERVIEW.md`](./PROJECT_OVERVIEW.md). API index: [`API_LLD.md`](./API_LLD.md).
 
 ## Scripts
 

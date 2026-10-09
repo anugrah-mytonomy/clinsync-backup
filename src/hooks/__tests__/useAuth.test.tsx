@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import { describe, expect, it } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { INVALID_TOKEN_RETRY_DELAY_MS } from '@/app/api/apiSlice';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/app/store';
@@ -50,6 +51,10 @@ describe('hasPermission', () => {
 });
 
 describe('useSession', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('sends the access token as a Bearer header and returns the session', async () => {
     let authorization: string | null = null;
     server.use(
@@ -93,9 +98,52 @@ describe('useSession', () => {
     await waitFor(() => expect(store.getState().auth.token).toBeNull());
   });
 
-  it('logs out on invalid_token', async () => {
+  it('retries session once after invalid_token then succeeds', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    let sessionCalls = 0;
+    server.use(
+      http.get('*/api/v1/session', () => {
+        sessionCalls += 1;
+        if (sessionCalls === 1) {
+          return HttpResponse.json(
+            { error: { code: 'invalid_token', message: 'Token is invalid', details: [], request_id: 'r' } },
+            { status: 401 },
+          );
+        }
+        return HttpResponse.json(mockSession);
+      }),
+    );
+
+    const { result } = renderWithToken(() => useSession(), 'clock-skew-token');
+
+    await waitFor(() => expect(sessionCalls).toBe(1));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(INVALID_TOKEN_RETRY_DELAY_MS);
+    });
+    await waitFor(() => expect(result.current.data).toEqual(mockSession));
+    expect(sessionCalls).toBe(2);
+  });
+
+  it('logs out when invalid_token persists after one retry', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    let sessionCalls = 0;
+    server.use(
+      http.get('*/api/v1/session', () => {
+        sessionCalls += 1;
+        return HttpResponse.json(
+          { error: { code: 'invalid_token', message: 'Token is invalid', details: [], request_id: 'r' } },
+          { status: 401 },
+        );
+      }),
+    );
+
     const { store } = renderWithToken(() => useSession(), 'invalid-token');
 
+    await waitFor(() => expect(sessionCalls).toBe(1));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(INVALID_TOKEN_RETRY_DELAY_MS);
+    });
+    await waitFor(() => expect(sessionCalls).toBe(2));
     await waitFor(() => expect(store.getState().auth.token).toBeNull());
   });
 

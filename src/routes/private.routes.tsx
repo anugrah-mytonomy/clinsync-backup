@@ -3,8 +3,8 @@ import type { RouteObject } from 'react-router-dom';
 import ProtectedRoute from '@/routes/ProtectedRoute';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import PageLoader from '@/components/ui/PageLoader';
+import DashboardPage from '@/pages/dashboard/DashboardPage';
 
-const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
 const LibraryPage = lazy(() => import('@/pages/content-library/LibraryPage'));
 const AddContentPage = lazy(() => import('@/pages/content-library/AddContentPage'));
 const ScanHistoryPage = lazy(() => import('@/pages/scan-history/ScanHistoryPage'));
@@ -23,7 +23,7 @@ const withSuspense = (element: RouteObject['element']) => {
 const dashboardRoutes: RouteObject[] = [
   {
     path: '/dashboard',
-    element: withSuspense(<DashboardPage />),
+    element: <DashboardPage />,
   },
   {
     path: '/library',

@@ -2,7 +2,7 @@
 
 **Feature Branch**: `006-add-content`
 **Created**: 2026-09-22
-**Status**: Partial (client validation + LocalStack upload in dev; production presigned-URL API not wired)
+**Status**: Partial (client validation + upload UI; presigned-URL API not wired)
 
 ## In short
 
@@ -11,8 +11,8 @@ Drag files onto `/library/add-content` and each one gets sorted into
 **rejected** (wrong file type, empty, or over 5 GB), with a plain-English
 reason shown for rejects. In production, uploads are meant to go straight to
 storage via a presigned URL — the frontend should never see real AWS
-credentials. Until that's wired, local dev uploads go through LocalStack
-instead so the flow can still be tested end-to-end.
+credentials. Until that's wired, Add Content stops at client validation and a
+UI-only upload step (no S3 persistence).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -36,7 +36,7 @@ Ready files are stored and appear in the library.
 **Acceptance Scenarios**:
 
 1. **Production**: `POST /library/uploads/initiate` → PUT presigned URL → `POST /library/uploads/complete`. Frontend MUST NOT receive long-lived AWS keys.
-2. **Local dev**: PUT via Vite `/s3` proxy to LocalStack is allowed until the same initiate/complete contract is available locally.
+2. **Until API wired**: Upload button advances the UI only; no object storage call from the browser.
 
 ### Edge Cases
 
@@ -57,7 +57,7 @@ Ready files are stored and appear in the library.
 ## Success Criteria *(mandatory)*
 
 - **SC-001**: Unsupported files never leave the client as `ready`.
-- **SC-002**: A ready PDF in local dev can be uploaded to LocalStack.
+- **SC-002**: A ready PDF can proceed through the upload UI (persistence when API wired).
 - **SC-003** (when API wired): complete creates a library row visible on `/library`.
 
 ## Out of Scope

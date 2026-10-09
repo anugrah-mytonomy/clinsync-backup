@@ -8,7 +8,6 @@ import {
   FORMATS_LABEL,
   validateFileBasics,
 } from '@/utils/addContentValidation';
-import { uploadFileToLocalStack } from '@/utils/localstackUpload';
 import type { UploadDisplayFile, UploadFile } from '@/components/ui/uploadFile/types';
 import UploadStatusPage, { type UploadResultItem } from './UploadStatusPage';
 import TagDocumentsPage, { type TagDocumentItem } from './TagDocumentsPage';
@@ -21,7 +20,6 @@ const createId = () => {
 
 const AddContentPage = () => {
   const [files, setFiles] = useState<UploadFile[]>([]);
-  const [isUploading, setIsUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
   const [uploadResults, setUploadResults] = useState<UploadResultItem[] | null>(null);
   const [tagDocuments, setTagDocuments] = useState<TagDocumentItem[] | null>(null);
@@ -85,12 +83,9 @@ const AddContentPage = () => {
 
   const canUpload = displayFiles.length > 0;
 
-  const handleUpload = async () => {
+  const handleUpload = () => {
     if (displayFiles.length === 0) return;
 
-    const readyFiles = displayFiles.filter((file) => file.status === 'ready');
-
-    setIsUploading(true);
     setUploadMessage(null);
     setUploadResults(
       displayFiles.map((file) => ({
@@ -100,12 +95,6 @@ const AddContentPage = () => {
         status: 'success',
       })),
     );
-
-    try {
-      await Promise.allSettled(readyFiles.map((item) => uploadFileToLocalStack(item.file)));
-    } finally {
-      setIsUploading(false);
-    }
   };
 
   const handleContinueToTagging = () => {
@@ -160,8 +149,7 @@ const AddContentPage = () => {
                   Clear All
                 </button>
                 <Button
-                  disabled={!canUpload || isUploading}
-                  isLoading={isUploading}
+                  disabled={!canUpload}
                   onClick={handleUpload}
                 >
                   Upload

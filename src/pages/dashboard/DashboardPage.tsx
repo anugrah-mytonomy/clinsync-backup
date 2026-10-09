@@ -13,7 +13,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-full flex-col bg-[#F1F5F9]">
+    <div className="flex min-h-full flex-col ">
       <PageHeader
         title="Dashboard"
         subtitle="Library health and scan risk at a glance"

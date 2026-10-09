@@ -9,6 +9,9 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    optimizeDeps: {
+      include: ['recharts'],
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
@@ -25,11 +28,6 @@ export default defineConfig(({ mode }) => {
           // refresh_token host-only on localhost (see .specify/specs/001-authentication/contracts/auth.md).
           cookieDomainRewrite: { '*': '' },
           rewrite: (path) => path.replace(/^\/api_auth/, ''),
-        },
-        '/s3': {
-          target: env.VITE_S3_ENDPOINT || 'http://localhost:4566',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/s3/, ''),
         },
         // Vite matches proxy keys by prefix in declaration order, so this must stay
         // after '/api_auth' (which also starts with '/api').

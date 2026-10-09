@@ -12,10 +12,9 @@ _By Anugrah M_
 7. [Styling & Design System](#7-styling--design-system)
 8. [Testing Strategy](#8-testing-strategy)
 9. [Environment Configuration](#9-environment-configuration)
-10. [Local File Uploads (LocalStack)](#10-local-file-uploads-localstack)
-11. [Code Quality & Tooling](#11-code-quality--tooling)
-12. [CI / Workflow](#12-ci--workflow)
-13. [Related Documentation](#13-related-documentation)
+10. [Code Quality & Tooling](#10-code-quality--tooling)
+11. [CI / Workflow](#11-ci--workflow)
+12. [Related Documentation](#12-related-documentation)
 
 ---
 
@@ -56,7 +55,6 @@ The architecture ensures:
 | Charts           | Recharts                           | Dashboard charts (risk trend, coverage, documents)     |
 | Testing          | Vitest + Testing Library           | Unit and component testing                             |
 | API Mocking      | Mock Service Worker (MSW)          | Mocking backend calls in tests                         |
-| Local Storage    | LocalStack (S3) via Docker Compose | Local S3 bucket for file uploads                       |
 | Linting          | ESLint                             | Static code analysis                                   |
 | Formatting       | Prettier                           | Code formatting                                        |
 
@@ -127,8 +125,7 @@ src/
 │   ├── cn.ts                    # className merge helper
 │   ├── constants.ts             # App constants
 │   ├── formatBytes.ts           # File size formatting
-│   ├── addContentValidation.ts  # Upload validation rules
-│   └── localstackUpload.ts      # S3 (LocalStack) upload helper
+│   └── addContentValidation.ts  # Upload validation rules
 │
 ├── assets/                      # SVG icons & images
 ├── main.tsx                     # Application entry point
@@ -377,9 +374,8 @@ Main variables:
 | Variable            | Purpose                           |
 | ------------------- | --------------------------------- |
 | `VITE_APP_ENV`      | Current environment name          |
-| `VITE_AUTH_API_URL` | Central Auth Service base URL     |
-| `VITE_S3_ENDPOINT`  | S3 / LocalStack endpoint          |
-| `VITE_S3_BUCKET`    | Upload bucket name                |
+| `VITE_AUTH_API_URL`     | Central Auth Service base URL |
+| `VITE_CLINSYNC_API_URL` | ClinSync API base URL         |
 
 Access pattern:
 
@@ -387,7 +383,7 @@ Access pattern:
 import.meta.env
 ```
 
-In development, the Vite dev server sends `/api_auth` requests to `VITE_AUTH_API_URL` and `/s3` requests to `VITE_S3_ENDPOINT`, which avoids CORS errors in the browser.
+In development, the Vite dev server proxies `/api_auth` to `VITE_AUTH_API_URL` and `/api` to `VITE_CLINSYNC_API_URL`, which avoids CORS errors in the browser.
 
 Build commands:
 
@@ -399,20 +395,7 @@ npm run build:prod    # production build
 
 ---
 
-## 10. Local File Uploads (LocalStack)
-
-Content uploads are saved to an S3 bucket. In local development, **LocalStack** provides that bucket inside Docker.
-
-```
-npm run localstack:up     # start LocalStack (S3) and create the bucket
-npm run localstack:down   # stop it
-```
-
-The upload helper is `utils/localstackUpload.ts`. See `LOCALSTACK.md` for the full setup.
-
----
-
-## 11. Code Quality & Tooling
+## 10. Code Quality & Tooling
 
 ### Linting
 
@@ -450,18 +433,18 @@ npm run test:coverage   # Vitest with coverage
 
 ---
 
-## 12. CI / Workflow
+## 11. CI / Workflow
 
 - Default branch: `main`
 - No CI pipeline is set up yet. Until one is, run `lint`, `typecheck`, `format:check` and `test` locally before you push.
 
 ---
 
-## 13. Related Documentation
+## 12. Related Documentation
 
 The pages below give more detail about the project:
 
 - `README.md` – getting started
 - `PROJECT_OVERVIEW.md` – product and feature overview
 - `API_LLD.md` – API low-level design
-- `LOCALSTACK.md` – LocalStack / S3 setup
+- `.specify/specs/006-add-content/` – upload feature spec

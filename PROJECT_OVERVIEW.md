@@ -21,7 +21,7 @@ Concretely, it's a tool that:
 - Tracks a review queue, eventually exporting governance reports.
 
 **Current state:** UI-first. Dashboard, library, and scans still use mock data. Add Content
-uploads to LocalStack in local dev. Login calls the real Central Auth API
+is client validation + UI flow until presigned upload APIs are wired. Login calls the real Central Auth API
 (`POST /centralauth/login`) and stores `access_token` in Redux. Stay-signed-in requires the
 auth service to set an HttpOnly `refresh_token` cookie — see
 [`.specify/specs/001-authentication`](./.specify/specs/001-authentication/spec.md).
@@ -76,7 +76,7 @@ src/
 ├── styles/               # global.css, theme.css (CSS custom properties / design tokens)
 ├── testing/              # setup.ts, testUtils.tsx
 ├── types/                # api.ts, library.ts, addContent.ts, scanHistory.ts
-├── utils/                # cn.ts, addContentValidation.ts, formatBytes.ts, localstackUpload.ts
+├── utils/                # cn.ts, addContentValidation.ts, formatBytes.ts
 └── main.tsx              # App entry (StrictMode, Redux Provider, RouterProvider)
 ```
 
@@ -99,12 +99,10 @@ Canonical spec: [`.specify/specs/001-authentication`](./.specify/specs/001-authe
 
 ## Backend / API Integration Points
 
-- **Env vars** (`.env.example`): `VITE_APP_ENV`, `VITE_AUTH_API_URL`
-  (default `http://localhost:4000`). Local dev uploads: `VITE_S3_ENDPOINT`, `VITE_S3_BUCKET`.
-- **Dev proxy**: `vite.config.ts` proxies `/api_auth` → `VITE_AUTH_API_URL`.
+- **Env vars** (`.env.example`): `VITE_APP_ENV`, `VITE_AUTH_API_URL`, `VITE_CLINSYNC_API_URL`.
+- **Dev proxy**: `vite.config.ts` proxies `/api_auth` → `VITE_AUTH_API_URL`, `/api` → ClinSync API.
 - **Test mocks**: `src/mocks/handlers.ts` mocks `POST */centralauth/login` (and refresh/logout).
-- **No library/scan/dashboard backend wired yet.** Those pages use mocks. Add Content
-  uploads to LocalStack locally; production will use presigned URLs (`API_LLD.md` §3).
+- **No library/scan/dashboard backend wired yet.** Those pages use mocks. Add Content will use presigned URLs (`API_LLD.md` §3) when integrated.
 
 ## Notable Configuration
 

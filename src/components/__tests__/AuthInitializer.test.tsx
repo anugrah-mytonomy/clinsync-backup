@@ -19,24 +19,19 @@ const renderApp = () => {
 };
 
 describe('AuthInitializer', () => {
-  it('restores the access token from the refresh cookie on app start', async () => {
+  it('does not call refresh before login', async () => {
+    let refreshCalls = 0;
     server.use(
-      http.post('*/centralauth/refresh', () =>
-        HttpResponse.json({ access_token: 'mock-token', expires_in: 3600 }),
-      ),
+      http.post('*/centralauth/refresh', () => {
+        refreshCalls += 1;
+        return HttpResponse.json({ access_token: 'mock-token', expires_in: 3600 });
+      }),
     );
 
     const { store } = renderApp();
 
-    expect(screen.getByRole('status')).toBeInTheDocument();
-    expect(await screen.findByText('App content')).toBeInTheDocument();
-    expect(store.getState().auth.token).toBe('mock-token');
-  });
-
-  it('renders the app logged out when there is no refresh cookie', async () => {
-    const { store } = renderApp();
-
-    expect(await screen.findByText('App content')).toBeInTheDocument();
+    expect(screen.getByText('App content')).toBeInTheDocument();
     expect(store.getState().auth.token).toBeNull();
+    expect(refreshCalls).toBe(0);
   });
 });

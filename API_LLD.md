@@ -11,7 +11,7 @@ This document describes the API contracts the **ClinSync UI** expects, based on 
 | Auth | `/login` | Real API (`POST /centralauth/login`). Session cookie (`refresh_token`) specified but not yet issued — see [auth gaps](./.specify/specs/001-authentication/gaps.md). |
 | Dashboard | `/dashboard` | Hardcoded mock in components |
 | Library | `/library` | `libraryMockData.ts` |
-| Add Content | `/library/add-content` | Client validation + LocalStack S3 (dev only) |
+| Add Content | `/library/add-content` | Client validation + UI (upload API not wired) |
 | Scan History | `/scans` | `scanHistoryMockData.ts` |
 | Scan Results | `/scans/:scanId` | Mock |
 | Document Details | `/scans/:scanId/documents/:documentId` | Mock |
@@ -269,7 +269,7 @@ Frontend should **not** receive AWS credentials. Use presigned URLs:
 3. POST /library/uploads/complete   → backend creates library record
 ```
 
-**Local dev:** Frontend currently PUTs directly to LocalStack via Vite proxy (`/s3/...`). Backend can mirror the same contract with LocalStack in dev and real S3 in prod.
+**Frontend:** Browser PUTs to presigned URLs from `initiate`; no direct S3 credentials in the UI.
 
 ---
 
@@ -671,7 +671,7 @@ Frontend helper: `getApiErrorMessage()` in `src/types/api.ts`.
 | `src/pages/content-library/libraryMockData.ts` | `GET /library/documents` |
 | `src/pages/scan-history/scanHistoryMockData.ts` | `GET /scans`, `GET /scans/:id/findings`, `GET /documents/:id` |
 | Dashboard component constants | `GET /dashboard/summary` |
-| `uploadFileToLocalStack()` (dev) | `initiate` → S3 PUT → `complete` |
+| Add Content upload UI | `initiate` → S3 PUT → `complete` |
 
 ---
 
@@ -692,5 +692,5 @@ Frontend helper: `getApiErrorMessage()` in `src/types/api.ts`.
 
 1. Add RTK Query slices: `libraryApiSlice`, `scansApiSlice`, `dashboardApiSlice`.
 2. Replace mock imports in pages with generated hooks.
-3. Swap LocalStack upload for presigned URL flow from backend.
+3. Wire Add Content to presigned URL flow from backend.
 4. Keep client-side basic validation; defer duplicate-in-library check to `initiate` response.

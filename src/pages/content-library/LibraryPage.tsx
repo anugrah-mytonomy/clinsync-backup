@@ -240,20 +240,20 @@ const LibraryPage = () => {
         title="Library"
         subtitle="Manage content, run governance scans, and track compliance."
         actions={
-          <div className="flex items-center gap-sm">
-            <Button variant="secondary">
-              <img src={scanMaximizeIcon} alt="" className="h-4 w-4 shrink-0" aria-hidden="true" />
-              Scan Full Library
-            </Button>
-            <Button variant="secondary" disabled={selectedIds.size === 0}>
-              <img src={playIcon} alt="" className="h-4 w-4 shrink-0" aria-hidden="true" />
-              Scan Selected
-            </Button>
-            <Button onClick={goToAddContent}>
+          <>
+            <Button onClick={goToAddContent} className="w-full sm:w-auto">
               <PlusIcon className="h-4 w-4" />
               Add Content
             </Button>
-          </div>
+            <Button variant="secondary" className="w-full sm:w-auto">
+              <img src={scanMaximizeIcon} alt="" className="h-4 w-4 shrink-0" aria-hidden="true" />
+              Scan Full Library
+            </Button>
+            <Button variant="secondary" disabled={selectedIds.size === 0} className="w-full sm:w-auto">
+              <img src={playIcon} alt="" className="h-4 w-4 shrink-0" aria-hidden="true" />
+              Scan Selected
+            </Button>
+          </>
         }
       />
 

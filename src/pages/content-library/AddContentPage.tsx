@@ -83,6 +83,7 @@ const AddContentPage = () => {
 
   const canUpload = displayFiles.length > 0;
 
+  console.log("hello sytsem", canUpload)
   const handleUpload = () => {
     if (displayFiles.length === 0) return;
 

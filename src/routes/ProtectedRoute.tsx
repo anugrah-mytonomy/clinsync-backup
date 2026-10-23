@@ -9,11 +9,12 @@ import PageLoader from '@/components/ui/PageLoader';
 const ProtectedRoute = () => {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectToken);
-  const [ready, setReady] = useState(() => Boolean(token));
+  // After reload, token is empty until refresh runs; do not tie this flag to `token` in effect deps
+  // or a successful refresh sets token before setBootstrapped and leaves the loader stuck forever.
+  const [bootstrapped, setBootstrapped] = useState(() => Boolean(token));
 
   useEffect(() => {
     if (token) {
-      setReady(true);
       return;
     }
 
@@ -22,20 +23,20 @@ const ProtectedRoute = () => {
     void (async () => {
       await requestRefreshToken(dispatch);
       if (!cancelled) {
-        setReady(true);
+        setBootstrapped(true);
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [dispatch, token]);
-
-  if (!ready) {
-    return <PageLoader />;
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run refresh once per mount when token was empty; re-running when token updates cancels setBootstrapped.
+  }, [dispatch]);
 
   if (!token) {
+    if (!bootstrapped) {
+      return <PageLoader />;
+    }
     return <Navigate to="/login" replace />;
   }
 

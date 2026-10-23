@@ -11,4 +11,4 @@ Behavior and API contracts live in `.specify/specs/` (constitution: `.specify/me
 - If code and spec disagree, change the spec first or change the code to match.
 - The UI never writes auth cookies. Login `Set-Cookie` is backend-only (`refresh_token`).
 - New features: copy `.specify/templates/spec-template.md` into `.specify/specs/NNN-name/spec.md`.
-- `API_LLD.md` indexes APIs; auth contract in `.specify/specs/001-authentication/contracts/auth.md` wins on conflicts.
+- Per-feature HTTP contracts live under `.specify/specs/<id>/contracts/` when present; auth: `.specify/specs/001-authentication/contracts/auth.md`.

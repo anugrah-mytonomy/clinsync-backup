@@ -45,7 +45,7 @@ The user opens `/scans/:scanId` to see findings, then a document under that scan
 ## Requirements *(mandatory)*
 
 - **FR-001**: List `GET /scans`. Detail `GET /scans/:scanId`. Findings `GET /scans/:scanId/findings`.
-- **FR-002**: Enums match `src/pages/scan-history/types.ts` and `API_LLD.md` §4–5.
+- **FR-002**: Enums match `src/pages/scan-history/types.ts` and the endpoints listed in this spec.
 - **FR-003**: Replace uses the same upload pipeline as Add Content plus metadata (`POST /documents/:documentId/replace`).
 - **FR-004**: Mock data is allowed until APIs are wired; status stays Partial.
 
@@ -60,4 +60,4 @@ The user opens `/scans/:scanId` to see findings, then a document under that scan
 
 ## Out of Scope
 
-- Async transport choice (polling vs SSE) — listed as an open question in `API_LLD.md` §9
+- Async transport choice (polling vs SSE) for long-running scans — `NEEDS CLARIFICATION`

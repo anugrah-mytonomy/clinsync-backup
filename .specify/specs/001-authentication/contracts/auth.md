@@ -1,6 +1,6 @@
 # Auth HTTP Contract
 
-Canonical contract for ClinSync ↔ Central Auth. Frontend and backend MUST match this file. If this file and `API_LLD.md` disagree, this file wins.
+Canonical contract for ClinSync ↔ Central Auth. Frontend and backend MUST match this file.
 
 **In short**: there is exactly one cookie in this whole product — `refresh_token`,
 set by the backend on login, HttpOnly (JavaScript can never read or write it).

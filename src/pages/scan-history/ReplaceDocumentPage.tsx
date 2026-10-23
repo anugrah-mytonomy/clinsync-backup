@@ -15,14 +15,13 @@ const bumpVersion = (version: string) => {
   return `v${Number(match[1]) + 1}`;
 };
 
-const ReplaceDocumentPage = () => {
-  const { scanId, documentId } = useParams<{ scanId: string; documentId: string }>();
-  const navigate = useNavigate();
+type ReplaceDocumentPageContentProps = {
+  scanId: string;
+  document: NonNullable<ReturnType<typeof getDocumentById>>;
+};
 
-  const document = documentId ? getDocumentById(documentId) : undefined;
-  if (!document || !scanId) {
-    return <Navigate to="/scans" replace />;
-  }
+const ReplaceDocumentPageContent = ({ scanId, document }: ReplaceDocumentPageContentProps) => {
+  const navigate = useNavigate();
 
   const scanHistory = getScanHistoryForDocument(document.id);
   const lastScannedAt = scanHistory[0]?.dateTime ?? document.addedAt;
@@ -152,6 +151,17 @@ const ReplaceDocumentPage = () => {
       </div>
     </div>
   );
+};
+
+const ReplaceDocumentPage = () => {
+  const { scanId, documentId } = useParams<{ scanId: string; documentId: string }>();
+  const document = documentId ? getDocumentById(documentId) : undefined;
+
+  if (!document || !scanId) {
+    return <Navigate to="/scans" replace />;
+  }
+
+  return <ReplaceDocumentPageContent scanId={scanId} document={document} />;
 };
 
 export default ReplaceDocumentPage;

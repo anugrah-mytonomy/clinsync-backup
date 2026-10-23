@@ -13,7 +13,7 @@ const { MODE, DEV, VITE_AUTH_API_URL, VITE_CLINSYNC_API_URL } = import.meta.env;
 const IS_TESTING = MODE === 'test';
 
 /** AUTH clock can be ahead of ClinSync; retry once before logout. */
-export const INVALID_TOKEN_RETRY_DELAY_MS = 1000;
+export const INVALID_TOKEN_RETRY_DELAY_MS = 2000;
 
 type ClinsyncExtraOptions = { invalidTokenRetried?: boolean };
 

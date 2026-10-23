@@ -40,7 +40,7 @@ A content-ops user opens `/dashboard` and sees inventory, scan coverage, risk ba
 - **FR-003**: MUST show Backlog tiles High / Medium / Low.
 - **FR-004**: MUST show Risk Trend (high/medium/low over time).
 - **FR-005**: MUST show Documents by Year.
-- **FR-006**: Production data MUST come from `GET /dashboard/summary` as in `API_LLD.md` §6. Until then, UI may use in-component mocks (status Partial).
+- **FR-006**: Production data MUST come from `GET /dashboard/summary` (query `range`: `7d` | `30d` | `90d` | `all`). Until then, UI may use in-component mocks (status Partial).
 - **FR-007**: `range` query values: `7d` | `30d` | `90d` | `all` (map UI tabs to these in the plan when wiring). Last 6 months / Last year / Custom Range mapping is `NEEDS CLARIFICATION` vs the four API values.
 
 ### Key Entities

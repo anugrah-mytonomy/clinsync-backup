@@ -22,7 +22,11 @@ coverage
 # Local UI component playground (dev only)
 src/playground/
 
+# Author-machine helper (hardcoded backend path); use README + npm run dev
+scripts/dev.ps1
+
 # Editor directories and files
+.cursor/
 .vscode/*
 !.vscode/extensions.json
 .idea

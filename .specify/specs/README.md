@@ -25,8 +25,7 @@ write the spec → (add a contract, if it talks to an API) → plan it → break
 6. Once shipped, mark the spec `Implemented` or `Partial`, and note anything
    still missing.
 
-`FEATURES.md` / `PROJECT_OVERVIEW.md` are just an index pointing here — the
-real detail always lives in this folder.
+This folder is the product index — start here for behavior and API expectations.
 
 ## Index
 
@@ -34,10 +33,10 @@ real detail always lives in this folder.
 |----|---------|--------|------|----------|
 | 001 | Authentication | Partial | [spec.md](./001-authentication/spec.md) | [contracts/auth.md](./001-authentication/contracts/auth.md) |
 | 002 | App shell & routing | Partial | [spec.md](./002-app-shell-and-routing/spec.md) | — |
-| 003 | Dashboard | Partial | [spec.md](./003-dashboard/spec.md) | [API_LLD §6](../../API_LLD.md) |
-| 004 | Content library | Partial | [spec.md](./004-content-library/spec.md) | [API_LLD §2](../../API_LLD.md) |
-| 005 | Scan history | Partial | [spec.md](./005-scan-history/spec.md) | [API_LLD §4–5](../../API_LLD.md) |
-| 006 | Add content | Partial | [spec.md](./006-add-content/spec.md) | [API_LLD §3](../../API_LLD.md) |
+| 003 | Dashboard | Partial | [spec.md](./003-dashboard/spec.md) | in spec (`GET /dashboard/summary`) |
+| 004 | Content library | Partial | [spec.md](./004-content-library/spec.md) | in spec (`GET /library/documents`, …) |
+| 005 | Scan history | Partial | [spec.md](./005-scan-history/spec.md) | in spec (`GET /scans`, …) |
+| 006 | Add content | Partial | [spec.md](./006-add-content/spec.md) | in spec (upload initiate / complete) |
 
 **Partial** means the UI exists but the specified backend contract is incomplete or not wired.
 

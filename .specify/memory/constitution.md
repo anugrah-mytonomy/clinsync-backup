@@ -12,7 +12,7 @@ Do not invent API fields, cookies, headers, storage, routes, or UI states that a
 
 ### II. One contract per integration
 
-Frontend and backend share one contract per feature (`.specify/specs/<id>/contracts/`). `API_LLD.md` is a generated-style index of those contracts, not a second competing design.
+Frontend and backend share one contract per feature (`.specify/specs/<id>/contracts/` or the feature `spec.md` until a contract file exists).
 
 Auth, cookies, tokens, and error shapes are specified in `.specify/specs/001-authentication/`. They are not implied by `credentials: 'include'` or by Redux.
 
@@ -48,7 +48,7 @@ Constitution changes require the same discipline: amend this file, then update a
 
 - Specs, constitution, and templates all live in `/.specify`. Feature specs are `/.specify/specs`.
 - Status on each spec is one of: `Draft` | `Active` | `Implemented` | `Partial` | `Deprecated`.
-- Stale narrative docs (`FEATURES.md`, `PROJECT_OVERVIEW.md`) must point here; they must not describe a different product.
+- Product behavior is defined only under `.specify/`; do not maintain parallel overview docs outside this tree.
 - A cookie, header, or storage mechanism that is not in the auth contract does not exist.
 
 **Version**: 1.0.0 | **Ratified**: 2026-09-22 | **Last Amended**: 2026-09-22

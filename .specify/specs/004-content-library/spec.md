@@ -34,7 +34,7 @@ The user scans, edits metadata, replaces, downloads, or deletes from the table.
 
 1. **Given** selected rows, **When** they Scan Selected, **Then** a scan is requested (`POST /scans` with `manual-selected` + ids) and they can move to Scan History.
 2. **Given** the library, **When** they Scan Full Library, **Then** `POST /scans` with `scheduled-full-library`.
-3. Row actions Edit / Replace / Download / Delete MUST exist. Backend endpoints for edit/delete/download are in `API_LLD.md` §2 (follow that contract when wiring).
+3. Row actions Edit / Replace / Download / Delete MUST exist. Wire to backend library document endpoints when available (add `contracts/` here before changing shapes).
 
 ### Edge Cases
 
@@ -46,7 +46,7 @@ The user scans, edits metadata, replaces, downloads, or deletes from the table.
 - **FR-001**: List from `GET /library/documents` with `search`, `page`, `pageSize`, optional `specialty`, `documentType`.
 - **FR-002**: Document shape is `LibraryDocument` (`src/pages/content-library/types.ts`).
 - **FR-003**: `highestRisk` is `"high"` | `"medium"` | `"low"` | `null`.
-- **FR-004**: Bulk and row actions must not be invented beyond `API_LLD.md` §2.
+- **FR-004**: Bulk and row actions must match this spec and any future `contracts/` for library APIs.
 - **FR-005**: Until the API is wired, mock data in `libraryMockData.ts` is allowed; status stays Partial.
 
 ### Key Entities

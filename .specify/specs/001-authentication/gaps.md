@@ -35,7 +35,7 @@ Login MUST `Set-Cookie` `refresh_token`. Refresh uses that cookie only. Frontend
 
 `credentials: 'include'` cannot populate the Cookies table. The browser only stores a cookie from `Set-Cookie`. Refresh then has no cookie, so the auth service correctly reports a missing token.
 
-`API_LLD.md` previously documented login JSON only, with no cookie. That incomplete spec is what allowed this drift. `contracts/auth.md` is now the contract.
+Older narrative docs documented login JSON only, with no cookie. That incomplete spec is what allowed this drift. `contracts/auth.md` is now the contract.
 
 ## How to confirm
 

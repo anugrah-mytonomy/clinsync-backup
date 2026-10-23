@@ -1,20 +1,24 @@
 ---
 name: react-coding-standard
-description: React/Redux/styling conventions actually used in pec-configurator-ui. Load when writing or editing React components, hooks, forms, or modals in this repo so new code matches the existing style.
+description: React/Redux/styling conventions used in ClinSync (clynsync). Load when writing or editing React components, hooks, forms, or API slices in this repo.
 ---
 
-# React coding standard (pec-configurator-ui)
+# React coding standard (ClinSync / clynsync)
 
-- **Redux access**: always use `useAppDispatch` / `useTypedSelector` from `src/app/store.ts`, never raw `useDispatch`/`useSelector` from `react-redux`. (`src/components/providers/PrivateAuthProvider.tsx` currently uses raw `useSelector` — that's an existing inconsistency, not the pattern to copy; fix it opportunistically if you're already touching that file.)
+- **Redux**: `useDispatch<AppDispatch>()` and `useSelector` from `react-redux` with types from `@/app/store`. Auth/session helpers live in `@/hooks/useAuth.ts` (`useSession`, `useOrganization`, `useHasPermission`).
 
-- **Styling**: use the design-token Tailwind classes backed by the `--mt-*` CSS variables in `src/styles/theme.css` (e.g. `bg-background-surface-default`, `text-text-primary`, `stroke-icon-primary`, `border-border-subtle`) instead of hardcoded hex or arbitrary Tailwind values. A handful of existing hardcoded hex values (`#FADBDE`, `#9CA3AF`) are pre-existing exceptions, not something to replicate.
+- **API**: RTK Query slices extend `authApiSlice` / `clinsyncApiSlice` from `@/app/api/apiSlice.ts`. ClinSync calls use the shared reauth base query; do not bypass it for authenticated routes. Auth uses `credentials: 'include'`; the UI never writes cookies.
 
-- **Icons**: import from the `src/styles/icons` barrel (`index.ts`), never a direct file import. Icon components take `React.SVGProps<SVGSVGElement>` and use `stroke="inherit"` internally so color is driven externally via a Tailwind `stroke-*` class on the call site.
+- **Styling**: Tailwind with shared tokens in `src/styles/global.css` (`gap-lg`, `text-muted`, `border-border`, `bg-background`, etc.). Match existing pages (e.g. library `#F1F5F9` shells) rather than inventing new palettes. Use `@/utils/cn` for conditional classes.
 
-- **Forms**: `react-hook-form` + `zodResolver(someRequestSchema)` from `@hookform/resolvers/zod`, validating against a schema in `src/schemas/`, built from the shared `Input`/`Button` components in `src/components/ui/`. Surface API/server errors via `setError("root", { message })` and render a `formState.errors.root` alert block (see `src/pages/login/index.tsx`).
+- **Icons**: `@/components/ui/icons` for inline SVG icons; feature assets under `@/assets/*.svg`.
 
-- **Modals**: build on `BaseModal` (`src/components/modal/BaseModal.tsx`) rather than a bespoke overlay — it already handles portal-to-`#root`, the `show`/`cbShowChange` prop pair, and click-outside-to-close.
+- **Forms**: `react-hook-form` + `zodResolver` + schemas in `src/schemas/`. Use `Input` / `Button` from `@/components/ui/`. API errors: `getApiErrorMessage` from `@/types/api` (see `LoginPage.tsx`).
 
-- **Tests**: colocate as `Foo.tsx` + `Foo.test.tsx`. Use `renderWithProvider` from `src/testing/testUtils.tsx` for anything touching Redux or `react-router`; it builds a fresh store per test and accepts `preloadedState`.
+- **Modals**: `@/components/ui/Modal` when adding overlays.
 
-For the config-editing domain specifically (discriminated-union config types, editor/preview pairs), see the `add-config-type` skill.
+- **Routing**: route tables in `src/routes/`; protected shell via `ProtectedRoute` + `DashboardLayout`.
+
+- **Tests**: colocate `*.test.tsx` / `*.test.ts`. Use `renderWithProviders` from `src/testing/testUtils.tsx` for Redux/router. MSW handlers in `src/mocks/handlers.ts`; tests use `src/testing/setup.ts`.
+
+- **Specs**: read matching `.specify/specs/NNN-*/spec.md` before changing user-visible behavior, auth, or HTTP contracts.

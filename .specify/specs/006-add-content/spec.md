@@ -40,15 +40,15 @@ Ready files are stored and appear in the library.
 
 ### Edge Cases
 
-- ZIP handling (one library row vs extracted files) is `NEEDS CLARIFICATION` (`API_LLD.md` §9).
+- ZIP handling (one library row vs extracted files) is `NEEDS CLARIFICATION`.
 - 5 GB is the specified max; browser memory limits are not separately specified.
 
 ## Requirements *(mandatory)*
 
 - **FR-001**: Accepted extensions: `pdf`, `doc`, `docx`, `zip`. Max 5 GB. Empty files rejected.
 - **FR-002**: UI statuses: `ready` | `review` | `rejected`.
-- **FR-003**: Production upload MUST follow `API_LLD.md` §3 (initiate / PUT / complete).
-- **FR-004**: New library records default specialties `Unassigned` and documentType `Unknown` until edited (complete response in LLD).
+- **FR-003**: Production upload MUST follow: `POST /library/uploads/initiate` → PUT presigned URL → `POST /library/uploads/complete`; if complete returns `202` with `processing`, poll `GET /library/uploads/:uploadId/status` until `ready` or `failed`.
+- **FR-004**: New library records default specialties `Unassigned` and documentType `Unknown` until edited (complete / status response).
 
 ### Key Entities
 

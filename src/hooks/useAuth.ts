@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { AppDispatch } from '@/app/store';
 import { logout, selectToken } from '@/feature/auth/authSlice';
-import { useGetSessionQuery, useLogoutMutation } from '@/feature/auth/authApiSlice';
+import {
+  useGetCurrentUserDataQuery,
+  useGetSessionQuery,
+  useLogoutMutation,
+} from '@/feature/auth/authApiSlice';
 import type { PermissionAction, PermissionMenu, Session } from '@/feature/auth/authApiSlice.types';
 
 export function useAuth() {
@@ -34,6 +38,12 @@ export function useAuth() {
 export function useSession() {
   const token = useSelector(selectToken);
   return useGetSessionQuery(token ?? skipToken);
+}
+
+// GET /centralauth/get_current_user_data for the current token (skipped while there is no token).
+export function useCurrentUser() {
+  const token = useSelector(selectToken);
+  return useGetCurrentUserDataQuery(token ?? skipToken);
 }
 
 export function useOrganization(): Session['organization'] | undefined {

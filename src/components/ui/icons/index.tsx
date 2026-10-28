@@ -49,6 +49,16 @@ const AlertIcon = (props: IconProps) => {
   );
 };
 
+const AlertCircleIcon = (props: IconProps) => {
+  return (
+    <OutlineIcon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v4.5" />
+      <circle cx="12" cy="16" r="0.4" fill="currentColor" stroke="none" />
+    </OutlineIcon>
+  );
+};
+
 const UploadIcon = (props: IconProps) => {
   return (
     <OutlineIcon {...props}>
@@ -152,6 +162,7 @@ const MoreVerticalIcon = (props: IconProps) => {
 };
 
 export {
+  AlertCircleIcon,
   AlertIcon,
   ChevronDownIcon,
   DocumentIcon,

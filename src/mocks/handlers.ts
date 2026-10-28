@@ -1,5 +1,17 @@
 import { http, HttpResponse } from 'msw';
-import type { ClinsyncApiError, Session } from '@/feature/auth/authApiSlice.types';
+import type {
+  ClinsyncApiError,
+  CurrentUserData,
+  Session,
+} from '@/feature/auth/authApiSlice.types';
+
+export const mockCurrentUser: CurrentUserData = {
+  id: 1,
+  email: 'john.doe@mytonomy.com',
+  first_name: 'John',
+  last_name: 'Doe',
+  status: { id: 'active' },
+};
 
 export const mockSession: Session = {
   user: { userId: 1, roles: ['admin'] },
@@ -53,6 +65,10 @@ export const handlers = [
   ),
 
   http.post('*/centralauth/logout', () => HttpResponse.json(null, { status: 200 })),
+
+  http.get('*/centralauth/get_current_user_data', () =>
+    HttpResponse.json(mockCurrentUser),
+  ),
 
   http.get('*/api/v1/session', ({ request }) => {
     const token = request.headers.get('Authorization')?.replace(/^Bearer /, '') ?? '';

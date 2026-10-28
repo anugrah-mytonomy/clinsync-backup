@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { mockSession } from '@/mocks/handlers';
+import { mockCurrentUser, mockSession } from '@/mocks/handlers';
 import { server } from '@/mocks/server';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@/testing/testUtils';
@@ -28,11 +28,15 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: 'Scan History' })).toBeInTheDocument();
   });
 
-  it('renders the signed-in user', () => {
-    renderWithProviders(<Sidebar />, { route: '/dashboard' });
+  it('renders the signed-in user from get_current_user_data', async () => {
+    const store = setupStore();
+    store.dispatch(setCredentials({ access_token: 'mock-token', expires_in: 3600 }));
+    renderWithProviders(<Sidebar />, { route: '/dashboard', store });
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('johndoe@mytonomy.com')).toBeInTheDocument();
+    expect(
+      await screen.findByText(`${mockCurrentUser.first_name} ${mockCurrentUser.last_name}`),
+    ).toBeInTheDocument();
+    expect(screen.getByText(mockCurrentUser.email)).toBeInTheDocument();
   });
 
   it('opens the account menu and closes it from Settings or the backdrop', async () => {

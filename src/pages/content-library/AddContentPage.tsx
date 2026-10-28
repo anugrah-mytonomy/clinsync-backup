@@ -77,19 +77,21 @@ const AddContentPage = () => {
     });
   }, [files]);
 
-  const readyCount = displayFiles.filter((file) => file.status === 'ready').length;
-  const reviewCount = displayFiles.filter((file) => file.status === 'review').length;
+  const readyFiles = displayFiles.filter((file) => file.status === 'ready');
+  const duplicateGroupCount = new Set(
+    displayFiles.filter((file) => file.status === 'review').map((file) => file.name.toLowerCase()),
+  ).size;
   const rejectedCount = displayFiles.filter((file) => file.status === 'rejected').length;
 
-  const canUpload = displayFiles.length > 0;
+  // Duplicates must be resolved (one copy removed) before anything is uploaded.
+  const canUpload = readyFiles.length > 0 && duplicateGroupCount === 0;
 
-  console.log("hello sytsem", canUpload)
   const handleUpload = () => {
-    if (displayFiles.length === 0) return;
+    if (!canUpload) return;
 
     setUploadMessage(null);
     setUploadResults(
-      displayFiles.map((file) => ({
+      readyFiles.map((file) => ({
         id: file.id,
         name: file.name,
         size: file.size,
@@ -136,22 +138,20 @@ const AddContentPage = () => {
           <UploadQueue displayFiles={displayFiles} onRemove={handleRemove} />
 
           {displayFiles.length > 0 && (
-            <div className="flex flex-wrap items-center justify-between gap-sm px-1">
+            <div className="flex flex-wrap items-center justify-between gap-sm">
               <p className="text-xs text-[#353839]">
-                {readyCount} accepted · {reviewCount} duplicate · {rejectedCount} rejected
+                {readyFiles.length} accepted · {duplicateGroupCount} duplicate · {rejectedCount}{' '}
+                rejected
                 {uploadMessage ? ` · ${uploadMessage}` : ''}
               </p>
               <div className="flex items-center gap-sm">
-                <button
-                  type="button"
-                  onClick={handleClearAll}
-                  className="text-sm font-medium text-muted hover:text-slate-900"
-                >
-                  Clear All
-                </button>
+                <Button variant="secondary" onClick={handleClearAll} className="h-10 px-lg py-md">
+                  Clear Queue
+                </Button>
                 <Button
                   disabled={!canUpload}
                   onClick={handleUpload}
+                  className="h-10 min-w-[85px] gap-1 px-lg py-md"
                 >
                   Upload
                 </Button>

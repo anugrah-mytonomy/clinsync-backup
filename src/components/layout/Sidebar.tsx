@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { LogoutIcon } from '@/components/ui/icons';
-import { useAuth, useOrganization } from '@/hooks/useAuth';
+import { useAuth, useCurrentUser, useOrganization } from '@/hooks/useAuth';
 import userAvatar from '@/assets/User_Avatar.svg';
 import logoIcon from '@/assets/Logo_icon.svg';
 import dashboardIcon from '@/assets/Dashboard.svg';
@@ -31,7 +31,9 @@ const menuItemClasses =
 const Sidebar = () => {
   const { logout } = useAuth();
   const organization = useOrganization();
+  const { data: currentUser } = useCurrentUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const userName = [currentUser?.first_name, currentUser?.last_name].filter(Boolean).join(' ');
   const logoSrc = (organization?.config.logo_url as string | undefined) || logoIcon;
 
   return (
@@ -126,8 +128,8 @@ const Sidebar = () => {
               aria-hidden="true"
             />
             <div className="hidden min-w-0 md:block">
-              <p className="truncate text-sm font-medium text-slate-900">John Doe</p>
-              <p className="truncate text-xs text-muted">johndoe@mytonomy.com</p>
+              <p className="truncate text-sm font-medium text-slate-900">{userName}</p>
+              <p className="truncate text-xs text-muted">{currentUser?.email}</p>
             </div>
           </button>
         </div>

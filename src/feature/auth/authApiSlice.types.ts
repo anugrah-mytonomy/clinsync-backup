@@ -9,6 +9,15 @@ export interface LoginResponse {
   expires_in: number;
 }
 
+// GET /centralauth/get_current_user_data
+export interface CurrentUserData {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  status: { id: string } & Record<string, unknown>;
+}
+
 export type PermissionMenu = 'DA' | 'LB' | 'SH';
 
 export type PermissionAction = 'read' | 'upload' | 'modify';

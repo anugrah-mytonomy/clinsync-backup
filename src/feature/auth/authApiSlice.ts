@@ -1,5 +1,10 @@
 import { authApiSlice, clinsyncApiSlice } from '@/app/api/apiSlice';
-import type { LoginRequest, LoginResponse, Session } from '@/feature/auth/authApiSlice.types';
+import type {
+  CurrentUserData,
+  LoginRequest,
+  LoginResponse,
+  Session,
+} from '@/feature/auth/authApiSlice.types';
 
 export type { LoginRequest, LoginResponse };
 
@@ -27,10 +32,20 @@ const injectedAuthApiSlice = authApiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
+    // Keyed by the access token, like getSession, so a new login or refresh refetches it.
+    getCurrentUserData: builder.query<CurrentUserData, string>({
+      query: () => '/centralauth/get_current_user_data',
+      providesTags: ['User'],
+    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useRefreshMutation } = injectedAuthApiSlice;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useRefreshMutation,
+  useGetCurrentUserDataQuery,
+} = injectedAuthApiSlice;
 
 const injectedClinsyncApiSlice = clinsyncApiSlice.injectEndpoints({
   endpoints: (builder) => ({

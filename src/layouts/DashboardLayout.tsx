@@ -1,7 +1,10 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from '@/components/layout/Sidebar';
+import { useCurrentUser } from '@/hooks/useAuth';
 
 const DashboardLayout = () => {
+  useCurrentUser();
+
   return (
     <div className="flex h-screen overflow-hidden bg-[#F1F5F9]">
       <Sidebar />

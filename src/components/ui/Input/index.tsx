@@ -9,6 +9,10 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>
   size?: InputSize;
   fullWidth?: boolean;
   variant?: 'default' | 'auth';
+  disabled?: boolean;
+  // Extra classes for the label and the input (value) respectively.
+  labelClassName?: string;
+  inputClassName?: string;
 }
 
 const sizeClasses: Record<InputSize, string> = {
@@ -18,7 +22,21 @@ const sizeClasses: Record<InputSize, string> = {
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, size = 'md', fullWidth = true, variant = 'default', id, className, ...props }, ref) => {
+  (
+    {
+      label,
+      error,
+      size = 'md',
+      fullWidth = true,
+      variant = 'default',
+      id,
+      className,
+      labelClassName,
+      inputClassName,
+      ...props
+    },
+    ref,
+  ) => {
     const inputId = id ?? props.name;
 
     return (
@@ -28,6 +46,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             'text-sm font-medium',
             variant === 'auth' ? 'text-[#353839CC]' : 'text-slate-900',
+            labelClassName,
           )}
         >
           {label}
@@ -44,7 +63,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             sizeClasses[size],
             fullWidth && 'w-full',
             error && 'border-danger focus:border-danger focus:ring-danger/20',
+            props.disabled && 'cursor-not-allowed border-border bg-[#F7FAFA] text-[#6B7387]',
             className,
+            inputClassName,
           )}
           {...props}
         />

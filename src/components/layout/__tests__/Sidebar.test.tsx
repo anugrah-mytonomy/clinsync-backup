@@ -42,7 +42,7 @@ describe('Sidebar', () => {
     await user.click(screen.getByTitle('Account'));
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/dashboard/settings',
+      '/settings',
     );
     await user.click(screen.getByRole('link', { name: 'Settings' }));
     expect(screen.queryByRole('link', { name: 'Settings' })).not.toBeInTheDocument();

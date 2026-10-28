@@ -1,11 +1,13 @@
-import { useRef, useState, type ChangeEvent, type DragEvent } from 'react';
+import { useRef, useState, type ChangeEvent, type DragEvent, type ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 import uploadIcon from '@/assets/Upload.svg';
 
 interface UploadDropzoneProps {
   onFilesSelected: (files: FileList) => void;
   accept: string;
-  formatsLabel: string;
+  formatsLabel: ReactNode;
+  title?: string;
+  multiple?: boolean;
   formats: string[];
 }
 
@@ -14,6 +16,8 @@ const UploadDropzone = ({
   accept,
   formatsLabel,
   formats,
+  title = 'Drag files here or browse your system',
+  multiple = true,
 }: UploadDropzoneProps) => {
   const [isDragActive, setIsDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -54,7 +58,7 @@ const UploadDropzone = ({
       <div className="mt-2 flex flex-col gap-2">
         <p className="text-sm text-slate-900">
           <span className="font-bold text-sm text-[#0F172A]">
-            Drag files here or browse your system
+            {title}
           </span>
         </p>
         <p className="text-xs text-[#94A3B8] font-normal">{formatsLabel}</p>
@@ -73,7 +77,7 @@ const UploadDropzone = ({
       <input
         ref={inputRef}
         type="file"
-        multiple
+        multiple={multiple}
         accept={accept}
         className="hidden"
         onChange={handleInputChange}

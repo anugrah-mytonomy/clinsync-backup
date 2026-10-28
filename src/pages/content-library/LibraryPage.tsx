@@ -8,6 +8,10 @@ import { MoreVerticalIcon, PlusIcon, SearchIcon } from '@/components/ui/icons';
 import { cn } from '@/utils/cn';
 import { libraryDocuments as initialDocuments } from '@/pages/content-library/libraryMockData';
 import NoContent from '@/pages/content-library/NoContent';
+import EditDocumentModal from '@/pages/content-library/EditDocumentModal';
+import ReplaceDocumentModal, {
+  type ReplaceDocumentChanges,
+} from '@/pages/content-library/ReplaceDocumentModal';
 import type { LibraryDocument, LibraryRiskLevel } from '@/pages/content-library/types';
 import scanMaximizeIcon from '@/assets/Scan_Maximize.svg';
 import playIcon from '@/assets/Play.svg';
@@ -21,6 +25,11 @@ const riskBadgeClasses: Record<LibraryRiskLevel, string> = {
 
 const DEFAULT_PAGE_SIZE = 10;
 
+const bumpVersion = (version: string) => {
+  const match = version.match(/^v(d+)$/i);
+  return match ? `v${Number(match[1]) + 1}` : version;
+};
+
 const LibraryPage = () => {
   const navigate = useNavigate();
   const [documents, setDocuments] = useState<LibraryDocument[]>(initialDocuments);
@@ -31,6 +40,8 @@ const LibraryPage = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [editingDocument, setEditingDocument] = useState<LibraryDocument | null>(null);
+  const [replacingDocument, setReplacingDocument] = useState<LibraryDocument | null>(null);
 
   const goToAddContent = () => navigate('/library/add-content');
 
@@ -48,6 +59,11 @@ const LibraryPage = () => {
     const values = [...new Set(documents.flatMap((doc) => doc.specialties))];
     return values.map((value) => ({ value, label: value }));
   }, [documents]);
+
+  const editableSpecialtyOptions = useMemo(
+    () => specialtyOptions.filter((option) => option.value !== 'Unassigned'),
+    [specialtyOptions],
+  );
 
   const documentTypeOptions = useMemo(() => {
     const values = [...new Set(documents.map((doc) => doc.documentType))];
@@ -78,6 +94,35 @@ const LibraryPage = () => {
       return next;
     });
     setOpenMenuId(null);
+  };
+
+  const handleEdit = (doc: LibraryDocument) => {
+    setEditingDocument(doc);
+    setOpenMenuId(null);
+  };
+
+  const handleUpdate = (
+    id: string,
+    changes: Pick<LibraryDocument, 'specialties' | 'documentType'>,
+  ) => {
+    setDocuments((prev) => prev.map((doc) => (doc.id === id ? { ...doc, ...changes } : doc)));
+    setEditingDocument(null);
+  };
+
+  const handleReplaceClick = (doc: LibraryDocument) => {
+    setReplacingDocument(doc);
+    setOpenMenuId(null);
+  };
+
+  const handleReplace = (id: string, { specialties, documentType }: ReplaceDocumentChanges) => {
+    setDocuments((prev) =>
+      prev.map((doc) =>
+        doc.id === id
+          ? { ...doc, specialties, documentType, version: bumpVersion(doc.version) }
+          : doc,
+      ),
+    );
+    setReplacingDocument(null);
   };
 
   const columns: TableColumn<LibraryDocument>[] = [
@@ -197,14 +242,14 @@ const LibraryPage = () => {
             <div className="absolute right-0 z-10 mt-1 w-40 overflow-hidden rounded-lg border border-[#35383914] bg-background py-1 shadow-[0px_4px_6px_-1px_rgba(16,24,40,0.1),0px_2px_4px_-2px_rgba(16,24,40,0.1)]">
               <button
                 type="button"
-                onClick={() => setOpenMenuId(null)}
+                onClick={() => handleEdit(doc)}
                 className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#353839] hover:bg-surface"
               >
                 Edit
               </button>
               <button
                 type="button"
-                onClick={() => setOpenMenuId(null)}
+                onClick={() => handleReplaceClick(doc)}
                 className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#353839] hover:bg-surface"
               >
                 Replace
@@ -332,6 +377,28 @@ const LibraryPage = () => {
           }}
         />
       </div>
+
+      {editingDocument && (
+        <EditDocumentModal
+          key={editingDocument.id}
+          document={editingDocument}
+          specialtyOptions={editableSpecialtyOptions}
+          documentTypeOptions={documentTypeOptions}
+          onClose={() => setEditingDocument(null)}
+          onUpdate={handleUpdate}
+        />
+      )}
+
+      {replacingDocument && (
+        <ReplaceDocumentModal
+          key={replacingDocument.id}
+          document={replacingDocument}
+          specialtyOptions={editableSpecialtyOptions}
+          documentTypeOptions={documentTypeOptions}
+          onClose={() => setReplacingDocument(null)}
+          onReplace={handleReplace}
+        />
+      )}
     </div>
   );
 };

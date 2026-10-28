@@ -14,11 +14,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-white hover:bg-primary-hover',
-  secondary: 'bg-surface text-slate-900 border border-[#3538392E] hover:bg-border/60',
-  danger: 'bg-danger text-white hover:bg-danger/90',
-  ghost: 'bg-transparent text-primary hover:bg-primary/10',
+  primary: 'border-transparent bg-primary text-white hover:bg-primary-hover',
+  secondary: 'border-[#3538392E] bg-surface text-slate-900 hover:bg-border/60',
+  danger: 'border-transparent bg-danger text-white hover:bg-danger/90',
+  ghost: 'border-transparent bg-transparent text-primary hover:bg-primary/10',
 };
+
+const disabledClasses =
+  'disabled:cursor-not-allowed disabled:border-[#35383914] disabled:bg-[#F3F4F6] disabled:text-[#35383961] disabled:shadow-[0px_1px_2px_0px_var(--ColorsEffectsShadowsshadow-xs)]';
 
 const sizeClasses: Record<ButtonSize, string> = {
   sm: 'px-sm py-xs text-sm',
@@ -40,7 +43,8 @@ const Button = ({
   return (
     <button
       className={cn(
-        'inline-flex items-center justify-center gap-sm font-sans font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60',
+        'inline-flex items-center justify-center gap-sm border font-sans font-medium transition-colors',
+        disabledClasses,
         rounded && 'rounded',
         variantClasses[variant],
         sizeClasses[size],

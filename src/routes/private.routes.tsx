@@ -13,8 +13,8 @@ const DocumentDetailsPage = lazy(() => import('@/pages/scan-history/DocumentDeta
 const ReplaceDocumentPage = lazy(() => import('@/pages/scan-history/ReplaceDocumentPage'));
 // const FindingsReportsPage = lazy(() => import('@/pages/dashboard/FindingsReportsPage'));
 const ReviewQueuePage = lazy(() => import('@/pages/dashboard/ReviewQueuePage'));
-// const HelpSupportPage = lazy(() => import('@/pages/dashboard/HelpSupportPage'));
-// const SettingsPage = lazy(() => import('@/pages/dashboard/SettingsPage'));
+const HelpSupportPage = lazy(() => import('@/pages/help-support/HelpSupportPage'));
+const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
 
 const withSuspense = (element: RouteObject['element']) => {
   return <Suspense fallback={<PageLoader />}>{element}</Suspense>;
@@ -53,14 +53,14 @@ const dashboardRoutes: RouteObject[] = [
     path: '/scans/:scanId/documents/:documentId/replace',
     element: withSuspense(<ReplaceDocumentPage />),
   },
-  // {
-  //   path: '/dashboard/help',
-  //   element: withSuspense(<HelpSupportPage />),
-  // },
-  // {
-  //   path: '/dashboard/settings',
-  //   element: withSuspense(<SettingsPage />),
-  // },
+  {
+    path: '/help',
+    element: withSuspense(<HelpSupportPage />),
+  },
+  {
+    path: '/settings',
+    element: withSuspense(<SettingsPage />),
+  },
 ];
 
 export const privateRoutes: RouteObject[] = [

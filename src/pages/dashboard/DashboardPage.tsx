@@ -3,11 +3,9 @@ import PageHeader from '@/components/layout/PageHeader';
 import Button from '@/components/ui/Button';
 import { PlusIcon } from '@/components/ui/icons';
 import DateRangeTabs from '@/pages/dashboard/DateRangeTabs';
+import DashboardFilters from '@/pages/dashboard/DashboardFilters';
 import Inventory from '@/pages/dashboard/Inventory';
-import Coverage from '@/pages/dashboard/Coverage';
 import Backlog from '@/pages/dashboard/Backlog';
-import RiskTrend from '@/pages/dashboard/RiskTrend';
-import DocumentsByYear from '@/pages/dashboard/DocumentsByYear';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -27,18 +25,9 @@ const DashboardPage = () => {
 
       <div className="flex flex-col gap-lg p-lg">
         <DateRangeTabs />
-
-        <div className="grid grid-cols-1 gap-lg lg:grid-cols-[3fr_2fr]">
-          <Inventory />
-          <Coverage />
-        </div>
-
-        <div className="grid grid-cols-1 gap-lg lg:grid-cols-2">
-          <Backlog />
-          <RiskTrend />
-        </div>
-
-        <DocumentsByYear />
+        <DashboardFilters />
+        <Inventory />
+        <Backlog />
       </div>
     </div>
   );

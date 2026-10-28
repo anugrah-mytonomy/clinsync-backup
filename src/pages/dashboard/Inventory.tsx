@@ -1,93 +1,45 @@
-import { AlertIcon } from '@/components/ui/icons';
-import ProgressBar from '@/components/ui/ProgressBar';
-import { cn } from '@/utils/cn';
-import type { DocumentTypeRow, SpecialtyTag } from '@/pages/dashboard/types';
+import type { ComponentType } from 'react';
+import { ReplaceIcon, SearchIcon, UploadIcon } from '@/components/ui/icons';
 
-const totalTitles = 8;
-const untaggedCount = 2;
+interface DetailCard {
+  label: string;
+  count: number;
+  caption: string;
+  icon: ComponentType<{ className?: string }>;
+}
 
-const specialtyTags: SpecialtyTag[] = [
-  { label: 'Oncology', count: 1 },
-  { label: 'General Surgery', count: 2 },
-  { label: 'Gastroenterology', count: 0 },
-  { label: 'Emergency Medicine', count: 1 },
-  { label: 'Ophthalmology', count: 0 },
-  { label: 'Pediatrics', count: 1 },
-  { label: 'Urology', count: 1 },
-  { label: 'Pulmonology', count: 0 },
-  { label: 'Unassigned', count: 2, flagged: true },
+const detailCards: DetailCard[] = [
+  { label: 'Documents Uploaded', count: 8, caption: '100% of library', icon: UploadIcon },
+  { label: 'Scanned', count: 2, caption: '25% of uploaded documents', icon: SearchIcon },
+  { label: 'Replaced', count: 1, caption: 'of 2 High/Medium documents', icon: ReplaceIcon },
 ];
-
-const documentTypes: DocumentTypeRow[] = [
-  { label: 'Procedural Guide', count: 1 },
-  { label: 'Medication Information', count: 1 },
-  { label: 'Discharge Instructions', count: 3 },
-  { label: 'Condition Overview / Disease Management', count: 3 },
-];
-
-const maxDocumentTypeCount = Math.max(...documentTypes.map((row) => row.count));
 
 const Inventory = () => {
   return (
-    <div className="rounded-lg border border-border bg-background px-6 py-5">
-      <div className="flex items-center justify-between gap-sm">
-        <h2 className="text-base font-bold text-slate-900">Inventory</h2>
-<span className="text-xs font-medium text-muted flex items-center justify-center">
-    Total Titles:{" "}
-    <span className="font-inter pl-1 text-lg font-bold leading-[100%] tracking-[0%] text-[#007FAA]">
-      {totalTitles}
-    </span>
-  </span>
-      </div>
-
-      <div className="mt-md flex items-start gap-sm rounded-md border border-[#FDE68A] bg-amber-50 px-3 py-2.5">
-        <AlertIcon className="h-4 w-4 shrink-0 text-amber-600" />
-        <p className="text-xs text-amber-800">
-          <span className="font-semibold">{untaggedCount} Untagged Documents</span> · Requires
-          specialty assignment to enable custom scan templates.
-        </p>
-      </div>
-
-      <div className="mt-5">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">By Specialty</h3>
-        <div className="mt-sm flex flex-wrap gap-xs">
-          {specialtyTags.map((tag) => (
-            <span
-              key={tag.label}
-              className={cn(
-                'rounded-full px-2.5 py-1 text-xs font-medium',
-                tag.flagged ? 'bg-amber-100 text-amber-800' : 'bg-[#D9ECF2] font-medium text-[#005875]',
-              )}
-            >
-              {tag.label} ({tag.count})
-            </span>
-          ))}
+    <section className="rounded-lg border border-border bg-background px-6 py-5">
+      <div className="flex items-start justify-between gap-sm">
+        <div>
+          <h2 className="text-base font-bold uppercase text-slate-900">Documents Details</h2>
+          <p className="text-xs text-slate-700">
+            Document counts, for documents uploaded in the selected date range
+          </p>
         </div>
+        <p className="shrink-0 text-xs text-muted">Aug 28, 2026 - Sep 28, 2026</p>
       </div>
 
-      <div className="mt-5">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">
-          By Document Type
-        </h3>
-        <ul className="mt-sm flex flex-col gap-sm">
-          {documentTypes.map((row) => (
-            <li key={row.label} className="flex items-center gap-sm">
-              <span className="w-56 shrink-0 truncate text-[13px] text-slate-600">
-                {row.label}
-              </span>
-              <ProgressBar
-                value={(row.count / maxDocumentTypeCount) * 100}
-                label={`${row.label}: ${row.count}`}
-                className="flex-1"
-              />
-              <span className="w-4 shrink-0 text-right text-[13px] font-semibold text-slate-900">
-                {row.count}
-              </span>
-            </li>
-          ))}
-        </ul>
+      <div className="mt-md grid grid-cols-1 gap-md md:grid-cols-3">
+        {detailCards.map(({ label, count, caption, icon: Icon }) => (
+          <div key={label} className="rounded-lg border border-border bg-background px-md py-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-slate-900">{label}</p>
+              <Icon className="h-4 w-4 text-slate-700" />
+            </div>
+            <p className="mt-2 text-2xl font-bold text-slate-900">{count}</p>
+            <p className="mt-1 text-xs text-slate-700">{caption}</p>
+          </div>
+        ))}
       </div>
-    </div>
+    </section>
   );
 };
 

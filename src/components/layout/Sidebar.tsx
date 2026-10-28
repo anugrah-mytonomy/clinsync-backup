@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { cn } from '@/utils/cn';
-import { HelpIcon, LogoutIcon, SettingsIcon } from '@/components/ui/icons';
+import { LogoutIcon } from '@/components/ui/icons';
 import { useAuth, useOrganization } from '@/hooks/useAuth';
 import userAvatar from '@/assets/User_Avatar.svg';
 import logoIcon from '@/assets/Logo_icon.svg';
 import dashboardIcon from '@/assets/Dashboard.svg';
 import contentLibraryIcon from '@/assets/Content_library.svg';
 import scanHistoryIcon from '@/assets/Scan_History.svg';
+import helpSupportIcon from '@/assets/Help_Support.svg';
+import settingsIcon from '@/assets/settings_icon.svg';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', iconSrc: dashboardIcon, end: true },
@@ -15,7 +17,7 @@ const navItems = [
   { to: '/scans', label: 'Scan History', iconSrc: scanHistoryIcon },
 ];
 
-const bottomNavItems = [{ to: '/dashboard/help', label: 'Help & Support', icon: HelpIcon }];
+const bottomNavItems = [{ to: '/help', label: 'Help & Support', iconSrc: helpSupportIcon }];
 
 const navLinkClasses = ({ isActive }: { isActive: boolean }) =>
   cn(
@@ -67,10 +69,19 @@ const Sidebar = () => {
       </nav>
 
       <div className="flex flex-col gap-xs mb-3">
-        {bottomNavItems.map(({ to, label, icon: Icon }) => (
+        {bottomNavItems.map(({ to, label, iconSrc }) => (
           <NavLink key={to} to={to} className={navLinkClasses} title={label}>
-            <Icon className="h-[16px] w-[16px] shrink-0" />
-            <span className="hidden md:inline">{label}</span>
+            {({ isActive }) => (
+              <>
+                <img
+                  src={iconSrc}
+                  alt=""
+                  className={cn('h-[16px] w-[16px] shrink-0', isActive && 'brightness-0 invert')}
+                  aria-hidden="true"
+                />
+                <span className="hidden md:inline">{label}</span>
+              </>
+            )}
           </NavLink>
         ))}
 
@@ -81,11 +92,16 @@ const Sidebar = () => {
               <div className="fixed inset-0 z-40" onClick={() => setIsMenuOpen(false)} />
               <div className="absolute bottom-0 left-full z-50 ml-2 w-48 overflow-hidden rounded-md border border-border bg-white py-1 shadow-lg">
                 <Link
-                  to="/dashboard/settings"
+                  to="/settings"
                   className={menuItemClasses}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <SettingsIcon className="h-[18px] w-[18px] shrink-0" />
+                  <img
+                    src={settingsIcon}
+                    alt=""
+                    className="h-[18px] w-[18px] shrink-0"
+                    aria-hidden="true"
+                  />
                   Settings
                 </Link>
                 <div className="my-1 border-t border-border" />
